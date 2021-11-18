@@ -12,13 +12,13 @@ public class rationalRootTheorem{
 	        int denominator = lastFactors[j];
 	        
 	        for(int k = 0; k < numTerms; k++){
-	            sumNum += (int) (coefficients[k] * Math.pow(numerator, numTerms - k - 1) * Math.pow(denominator, k));
+	            sumNum += coefficients[k] * (int) Math.pow(numerator, numTerms - k - 1) * (int) * Math.pow(denominator, k);
 	        }
 	        if (sumNum == 0){return lastFactors[j] + "/" + firstFactors[i]; }
 	        
 	        sumNum = 0;
 	        for(int k = 0; k < coefficients.length; k++){
-	            sumNum += (int) (coefficients[k] * Math.pow( -numerator, numTerms - k - 1) * Math.pow(denominator, k));
+	            sumNum += coefficients[k] * (int) Math.pow(-numerator, numTerms - k - 1) * (int) * Math.pow(denominator, k);
 	        }
 	        if(sumNum == 0){return "-" + lastFactors[j] + "/" + firstFactors[i];}
 	     }
