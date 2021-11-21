@@ -1,7 +1,7 @@
 public class Main{
 	public static String quadSolver(int[] coefficients){
     int a = coefficients[0]; int b = coefficients[1]; int c = coefficients[2]; // [a, b, c] corresponds to ax^2 + bx + c = 0 
-    int discriminant = (int) Math.pow(b, 2) - 4 * a * c; // Discriminant: b^2 - 4ac, to be used to test single/double real roots or negative roots
+    int discriminant = (int) Math.pow(b, 2) - 4 * a * c; // Discriminant: b^2 - 4ac, to be used to test real roots for disc >= 0 or imaginary roots for disc < 0
     
     if(discriminant >= 0){
         int maxSquare = maxSquareFactor(discriminant); // Factor out the greatest square from the discriminant
