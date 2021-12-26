@@ -29,8 +29,12 @@ public class Rational implements Comparable
     _numerator = 0;
     _denominator = 1;
   }
-
-
+    public Rational(int num){
+        this(num, 1);
+    }
+    public Rational(Rational other){
+        this(other._numerator, other._denominator);
+    }
   /***
    * Overloaded constructor
    * @param numerator
@@ -55,6 +59,7 @@ public class Rational implements Comparable
   // returns a string representation of the rational number (formatting of your choice)
   public String toString()
   {
+    if(_denominator == 1) return _numerator + "";
     return _numerator + " / " + _denominator;
   }
 
@@ -117,7 +122,7 @@ public class Rational implements Comparable
     _numerator = _numerator / g;
     _denominator = _denominator / g;
 
-    if (_numerator < 0 && _denominator < 0) {
+    if (_denominator < 0) {
       _numerator *= -1;
       _denominator *= -1;
     }
