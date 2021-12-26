@@ -14,45 +14,40 @@ public class Transformations{
         Rational b = constants[1];
         Rational m = constants[2];
         Rational c = constants[3];
-        /*
-        Rational midX = new Rational(a.add(b.multiply(m)).subtract(c.multiply(m) ).divide( m.multiply(m).add(1) ) ); */
-        Rational midX = new Rational();
-        /* Rational midY = new Rational(); */
         
-        Rational aCopy = new Rational(a);
+	Rational aCopy = new Rational(a);
         Rational bCopy = new Rational(b);
         Rational cCopy = new Rational(c);
-        Rational mCopy = new Rational(m);
+        Rational mCopy = new Rational(m);	
         
-        bCopy.multiply(m);
-        cCopy.multiply(m);
-        mCopy.multiply(m);
-        mCopy.add(new Rational(1, 1) );
-        
-        midX.add(a);
-        midX.add(bCopy);
-        midX.subtract(cCopy);
-        midX.divide(mCopy);
-        
-        Rational midY = new Rational(midX);
-        midY.multiply(m);
-        midY.add(c);
+        Rational midX = new Rational();
         
         
-        /*
-        midX = midX.add(a).add( b.multiply(m) ).subtract(c.multiply(m) );
-        midX = midX.divide(m.multiply(m).add(1)  );
-        midY = midY.add(midX.multiply(m).add(c)); 
-        */
+        /* Determine x coordinate of mid point between initial point and reflected point */
+        bCopy.multiply(m); // bm
+        cCopy.multiply(m); // cm
+        mCopy.multiply(m); mCopy.add(new Rational(1)); // m^2 + 1
+        
+        midX.add(a); // a
+        midX.add(bCopy); // a + bm
+        midX.subtract(cCopy); // a + bm - cm
+        midX.divide(mCopy); // (a + bm - cm) / (m^2 + 1) = x
+        /*                                                                         */
+		
+        Rational midY = new Rational(midX); // y = x
+        midY.multiply(m); 		   // y = mx
+        midY.add(c);                       // y = mx + c
+            
+		
+	Rational reflectedXCor = new Rational(midX);
+	Rational reflectedYCor = new Rational(midY);
 	    
-	    Rational reflectedXCor = new Rational(midX);
-	    Rational reflectedYCor = new Rational(midY);
+	reflectedXCor.multiply(new Rational(2)); // 2x
+	reflectedXCor.subtract(a); // 2x - a
 	    
-	    reflectedXCor.multiply(new Rational(2));
-	    reflectedXCor.subtract(a);
-	    reflectedYCor.multiply(new Rational(2));
-	    reflectedYCor.subtract(b);
-	    
+	reflectedYCor.multiply(new Rational(2)); // 2y
+	reflectedYCor.subtract(b); // 2y - a
+
 	    reflectedXCor.reduce();
 	    reflectedYCor.reduce();
 	    System.out.println( reflectedXCor.toString() );
@@ -63,14 +58,25 @@ public class Transformations{
 	    reflectedCoordinates[1] = reflectedYCor;
 	    return reflectedCoordinates;
 	}
-		public static Rational[] reflectPoint(int[] constants){
-        Rational[] rationals = new Rational[4];
-        for(int i = 0; i < 4; i++) { rationals[i] = new Rational(constants[i]); }
-        return reflectPoint(rationals);
+	
+	public static Rational[] reflectPoint(int[] constants){
+		Rational[] rationals = new Rational[4];
+		for(int i = 0; i < 4; i++) { rationals[i] = new Rational(constants[i]); }
+		return reflectPoint(rationals);
 	}
+	
 	public static double[] rotatePoint(Rational[] constants, int angle){
 	    /* Rotate a point clockwise by the given angle (given in degrees) */
-	    
+	    /* Clockwise Rotation matrix: 
+	    	[cos@  sin@]
+		[-sin@ cos@]
+	   Applied to a point, [a, b],
+	   [cos@ sin@]  [a]  = [acos@ + bsin@] // rotated x coordinate
+	   [-sin@ cos@] [b]  = [-asin@ + bcos@] // rotated y coordinate
+	   
+	   Return the rotated coordinates
+	    */
+		
 	    double xCor = constants[0].floatValue();
 	    double temp = constants[0].floatValue();
 	    double yCor = constants[1].floatValue();
