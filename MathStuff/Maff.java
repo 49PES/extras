@@ -98,7 +98,12 @@ public class Maff{
 	    System.out.println("Invalid type! Try 'side' or 'angle' ");
 	    return 0;
 	} */
-	
+	public static double pythag(float a, float b, String type){
+	    if(type.equals("hypotenuse") ) {return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2) );}
+	    else if (type.equals("leg") ) {return Math.sqrt(Math.pow(b, 2) - Math.pow(a, 2) ); }
+	    System.out.println("Invalid type! Try 'hypotenuse' or 'leg'.");
+	    return 0;
+	}
     public static void main(){
     }
 }
