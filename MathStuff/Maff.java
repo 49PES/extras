@@ -37,7 +37,7 @@ public class Maff{
 	// optimized using permutation and factorial, factorial of the lower complement between n - k & k
 	public static int choose(int elements, int chosen){
 	    if(elements - chosen < chosen) return permute(elements, chosen) / factorial(chosen);
-	    else return permute(elements, elements - chosen) / factorial(elements - chosen);
+	    return permute(elements, elements - chosen) / factorial(elements - chosen);
 	}
 	
 	
