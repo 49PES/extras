@@ -1,4 +1,4 @@
-public class Main{
+public class rootsSolver{
 	
 	public static String rootsSolver(int[] coefficients){
         if(coefficients.length == 3){return QuadraticSolver.quadSolver(coefficients);} // Base case for polynomials length 3+
@@ -43,8 +43,8 @@ public class Main{
             
             if(sumNumNeg == 0){
                 int[] quotient = syntheticDivision(coefficients, -numerator, denominator);
-                if(denominator == 1) {return String.format("%d, ", numerator) + rootsSolver(quotient);} 
-                else{return String.format("%d/%d, ", numerator, denominator) + rootsSolver(quotient);}
+                if(denominator == 1) {return String.format("%d, ", -numerator) + rootsSolver(quotient);} 
+                else{return String.format("%d/%d, ", -numerator, denominator) + rootsSolver(quotient);}
             }
          }
         
@@ -59,8 +59,8 @@ public class Main{
     and add the corresponding coefficient in the original polynomial */
     
     // P. S. using (quotient[i - 1] * numerator)/denominator avoids potential issues with integer combinations 
-    // Multiplying quotient[i - 1] * numerator/denominator might lead to an erroneous value 
-    // e.g. 3 * 2/3 returning 0 vs (3 * 2)/3 returning 2 as expected - hence int numerator and denominator used instead of double fraction
+    // Multiplying quotient[i - 1] * (numerator/denominator) might lead to an erroneous value 
+    // e.g. 3 * (2/3) returning 0 vs (3 * 2)/3 returning 2 as expected - hence int numerator and denominator used instead of double fraction
     
         int[] quotient = new int[polynomial.length - 1];
         quotient[0] = polynomial[0];
@@ -98,9 +98,9 @@ public class Main{
 		// System.out.println(quadSolver(coefficients4));
 		System.out.println(rootsSolver(coefficients5));
 		System.out.println(rootsSolver(coefficients6));
-		System.out.println(Maff.permute(5, 2));
-		System.out.println(Maff.permute(7, 3)); 
-		System.out.println(String.format("5 choose 3  = 5p3/3! = %d/%d = %d", Maff.permute(5, 3), Maff.factorial(3), Maff.permute(5, 3)/Maff.factorial(3)));
-		System.out.println(Maff.choose(5, 3));
+//		System.out.println(Maff.permute(5, 2));
+//		System.out.println(Maff.permute(7, 3)); 
+//		System.out.println(String.format("5 choose 3  = 5p3/3! = %d/%d = %d", Maff.permute(5, 3), Maff.factorial(3), Maff.permute(5, 3)/Maff.factorial(3)));
+//		System.out.println(Maff.choose(5, 3));
 	}
 }
