@@ -6,7 +6,7 @@ public class QuadraticSolver{
     if(discriminant >= 0){
         int maxSquare = maxSquareFactor(discriminant); // Factor out the greatest square from the discriminant
         discriminant = discriminant/((int) Math.pow(maxSquare, 2)); // Here on out, discriminant represents the (simplified) value inside the square root
-        int gcd = Maff.gcd(Maff.gcd(b, maxSquare), 2 * a); // Determine the GCD of the -b, max square factor of the discriminant, and the 2a denominator for simplification purposes
+        int gcd = MathC.gcd(MathC.gcd(b, maxSquare), 2 * a); // Determine the GCD of the -b, max square factor of the discriminant, and the 2a denominator for simplification purposes
         
         if(discriminant == 1){ 
             // When the discriminant is a perfect square, there can only be rational roots (0, 1, or 2 potential integer values)
@@ -14,8 +14,8 @@ public class QuadraticSolver{
             // e. g. 2x^2 -3x + 1 = 0 with roots 1 and 1/2 
             // Code checks for both integer, "positive" root -> integer, "negative" root -> integer, and then neither integer
             
-            int gcdPos = Maff.gcd(-b + maxSquare, 2 * a);
-            int gcdNeg = Maff.gcd(-b - maxSquare, 2 * a);
+            int gcdPos = MathC.gcd(-b + maxSquare, 2 * a);
+            int gcdNeg = MathC.gcd(-b - maxSquare, 2 * a);
             // gcdPos and gcdNeg represent GCD's of numerator and denominator of "positive" and "negative" roots 
             // They are divided from the numerator and denominator to reduce to simplest form
             
@@ -54,7 +54,7 @@ public class QuadraticSolver{
     else{
         discriminant *= -1; // Factor out "i" from the discriminant, incorporate i into the string instead
         int maxSquare = maxSquareFactor(discriminant);
-        int gcd = Maff.gcd(Maff.gcd(-b, maxSquare), 2 * a);
+        int gcd = MathC.gcd(MathC.gcd(-b, maxSquare), 2 * a);
         discriminant = discriminant/((int) Math.pow(maxSquare, 2)); // Here on out, discriminant represents the (simplified) value inside the square root
         
         if(gcd == Math.abs(2 * a)){
