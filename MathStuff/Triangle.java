@@ -72,6 +72,7 @@ public class Triangle {
       /* a^2 + b^2 - 2abcosC = c^2
            sqrt(a^2 + b^2 - 2abcosC) = c
            side1, side2, angle3 = a, b, C  */
+        
         return Math.sqrt(Math.pow(side1, 2) + Math.pow(side2, 2) - 2 * side1 * side2 * Math.cos(angle3 * Math.PI / 180));
     }
 
@@ -89,7 +90,6 @@ public class Triangle {
             }
         }
         else if (numSides == 2 && numAngles >= 1) {
-            // Two cases with Law of Cosines involving 2 sides and an angle: SAS & HLR
 
             // SAS Cases
             if (sideA == 0.0 && angleA != 0.0) {
@@ -106,7 +106,7 @@ public class Triangle {
                 sideC = lawOfCosinesHelperSides(sideA, sideB, angleC);
                 lawOfCosines();
             }
-
+            /*
             // HLR Cases
 
             if(sideA == 0.0 && (angleB == 90.0 || angleC == 90.0) ){
@@ -120,44 +120,57 @@ public class Triangle {
             if(sideC == 0.0 && (angleA == 90.0 || angleB == 90.0) ){
                 sideC = Math.sqrt( Math.abs( Math.pow(sideB, 2) - Math.pow(sideC, 2)   )  );
                 lawOfCosines();
-            }
+            } */
         }
         enumerate();
     }
 
     private void lawOfSines() {
         if (numAngles >= 2 && numSides >= 1) {
+            // ASA Cases
             if (sideA != 0.0 && angleA != 0.0 && angleB != 0.0 && sideB == 0.0) {
                 sideB = lawOfSinesHelper(sideA, angleA, angleB);
-                lawOfCosines();
             }
 
             if (sideB != 0.0 && angleB != 0.0 && angleA != 0.0 && sideA == 0.0) {
                 sideA = lawOfSinesHelper(sideB, angleB, angleA);
-                lawOfCosines();
             }
 
             if (sideA != 0.0 && angleA != 0.0 && angleC != 0.0 && sideC == 0.0) {
                 sideC = lawOfSinesHelper(sideA, angleA, angleC);
-                lawOfCosines();
             }
 
             if (sideC != 0.0 && angleC != 0.0 && angleA != 0.0 && sideA == 0.0) {
                 sideA = lawOfSinesHelper(sideC, angleC, angleA);
-                lawOfCosines();
             }
 
             if (sideB != 0.0 && angleB != 0.0 && angleC != 0.0 && sideC == 0.0) {
                 sideC = lawOfSinesHelper(sideB, angleB, angleC);
-                lawOfCosines();
             }
 
             if (sideC != 0.0 && angleC != 0.0 && angleB != 0.0 && sideB == 0.0) {
                 sideB = lawOfSinesHelper(sideC, angleC, angleB);
-                lawOfCosines();
             }
         }
 
+        if(numSides == 2 && numAngles == 1) {
+            // SSA Cases (Only when triangle is known to be right [HLR] or obtuse - when an angle is greater or equal to 90.0 degrees )
+            if(sideA != 0.0 && sideB != 0.0 && (angleA >= 90.0 || angleB >= 90.0 ) ){
+                if(angleA == 0.0){angleA = Math.asin( (sideA * Math.sin(angleB * Math.PI / 180)) / sideB  ) * 180 / Math.PI; }
+                if(angleB == 0.0){angleB = Math.asin( (sideB * Math.sin(angleA * Math.PI / 180)) / sideA  ) * 180 / Math.PI; }
+            }
+
+            if(sideB != 0.0 && sideC != 0.0 && (angleB >= 90.0 || angleC >= 90.0 ) ){
+                if(angleB == 0.0){angleB = Math.asin( (sideB * Math.sin(angleC * Math.PI / 180)) / sideC  ) * 180 / Math.PI; }
+                if(angleC == 0.0){angleC = Math.asin( (sideC * Math.sin(angleB * Math.PI / 180)) / sideB  ) * 180 / Math.PI; }
+            }
+
+            if(sideA != 0.0 && sideC != 0.0 && (angleA >= 90.0 || angleC >= 90.0 ) ){
+                if(angleA == 0.0){angleA = Math.asin( (sideA * Math.sin(angleC * Math.PI / 180)) / sideC  ) * 180 / Math.PI; }
+                if(angleC == 0.0){angleC = Math.asin( (sideC * Math.sin(angleA * Math.PI / 180)) / sideA  ) * 180 / Math.PI; }
+            }
+
+        }
 
     }
 
