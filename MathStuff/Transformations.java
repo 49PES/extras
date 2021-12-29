@@ -1,3 +1,4 @@
+import java.util.Arrays;
 public class Transformations{
 	public static Rational[] reflectPoint(Rational[] constants){
         /* Reflecting (a, b) over y = mx + c 
