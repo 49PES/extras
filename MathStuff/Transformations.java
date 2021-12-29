@@ -80,8 +80,8 @@ public class Transformations{
 	    double xCor = constants[0].floatValue();
 	    double temp = constants[0].floatValue();
 	    double yCor = constants[1].floatValue();
-	    double cos = Math.cos(angle * Math.PI / 180 );
-	    double sin = Math.sin(angle * Math.PI / 180);
+	    double cos = MathC.cosd(angle);
+	    double sin = MathC.sind(angle);
 	    
 	    xCor = xCor * cos + yCor * sin;
 	    yCor = temp * -sin  + yCor * cos;
@@ -98,11 +98,13 @@ public class Transformations{
 	    dilatedCoordinates[1] = b + dilationFactor * (d - b);
 	    return dilatedCoordinates;
 	}
+	
 	public static float[] translatePoint(float[] coordinates, float[] translation){
 	    coordinates[0] += translation[0];
 	    coordinates[1] += translation[1];
 	    return coordinates;
 	}
+	
 	public static void main(String[] args) {
 		System.out.println("Hello World");
 		Rational[] problemOne = new Rational[4];
