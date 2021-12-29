@@ -1,52 +1,78 @@
 public class QuadraticSolver{
     public static String quadSolver(int[] coefficients){
         int a = coefficients[0], b = coefficients[1], c = coefficients[2]; // [a, b, c] corresponds to ax^2 + bx + c = 0
+        int denominator = 2 * a;
         int discriminant = (int) Math.pow(b, 2) - 4 * a * c; // Discriminant: b^2 - 4ac, to be used to test real roots for disc >= 0 or imaginary roots for disc < 0
+        String outputOne = ""; String outputTwo = "";
 
         if(discriminant >= 0){
             int maxSquare = maxSquareFactor(discriminant); // Factor out the greatest square from the discriminant
-            discriminant = discriminant/((int) Math.pow(maxSquare, 2)); // Here on out, discriminant represents the (simplified) value inside the square root
-            int gcd = MathC.gcd(MathC.gcd(b, maxSquare), 2 * a); // Determine the GCD of the -b, max square factor of the discriminant, and the 2a denominator for simplification purposes
+            discriminant /= ((int) Math.pow(maxSquare, 2)); // Here on out, discriminant represents the (simplified) value inside the square root
 
-            if(discriminant == 1){
+            int gcd = MathC.gcd(MathC.gcd(b, maxSquare), denominator); // Determine the GCD of the -b, max square factor of the discriminant, and the 2a denominator for simplification purposes
+
+            b /= gcd; maxSquare /= gcd; denominator /= gcd;
+
+            // RATIONAL!
+            if(discriminant == 1 || discriminant == 0){
                 // When the discriminant is a perfect square, there can only be rational roots (0, 1, or 2 potential integer values)
                 // There are situations where there is one integer root and one rational (non-integer) root
                 // e. g. 2x^2 -3x + 1 = 0 with roots 1 and 1/2
-                Rational negRoot = new Rational((-b - maxSquare), 2 * a );
-                Rational posRoot = new Rational((-b + maxSquare), 2 * a );
-                negRoot.reduce(); posRoot.reduce();
-                return negRoot.toString() + ", " + posRoot.toString();
-
+                if(discriminant == 1) {
+                    Rational negRoot = new Rational((-b - maxSquare), denominator);
+                    Rational posRoot = new Rational((-b + maxSquare), denominator);
+                    negRoot.reduce();
+                    posRoot.reduce();
+                    return negRoot.toString() + ", " + posRoot.toString();
+                }
+                Rational doubRoot = new Rational(-b, denominator);
+                doubRoot.reduce();
+                return doubRoot.toString() + ", " + doubRoot.toString();
             }
 
-            if(maxSquare == 1){
-                return String.format("(%1$d + √%2$d)/%3$d, (%1$d - √%2$d)/%3$d", -b, discriminant, 2 * a); // Irrational where discriminant has no square factor
-            }
-            if(gcd == Math.abs(2 * a)){
-                return String.format("%1$d + %2$d√%3$d, %1$d - %2$d√%3$d", -b/gcd, maxSquare/gcd, discriminant); // Irrational w/out a denominator
-            }
+            // IRRATIONAL!
+            if(b != 0 && denominator != 1){outputOne += "("; outputTwo += "(";}
 
+            if(b != 0){outputOne += -b + " + "; outputTwo += -b + " - ";}
+            else {outputTwo += "-";}
 
-            if(maxSquare == gcd){return String.format("(%1$d + √%2$d)/%3$d, (%1$d - √%2$d)/%3$d", -b/gcd, discriminant, (2 * a)/gcd);} // Irrational where the max square factor factored from the sqrt() is equal to the gcd (e.g. 2sqrt(7) with gcd of 2 -> sqrt(7))
-            return String.format("(%1$d + %2$d√%3$d)/%4$d, (%1$d - %2$d√%3$d)/%4$d", -b/gcd, maxSquare/gcd, discriminant, (2 * a)/gcd);
+            if(maxSquare != 1){outputOne += maxSquare + ""; outputTwo += maxSquare + "";}
+
+            if(discriminant != 1){outputOne += "sqrt(" + discriminant + ")"; outputTwo += "sqrt(" + discriminant + ")";}
+
+            if(b != 0 && denominator != 1){outputOne += ")"; outputTwo += ")";}
+
+            if(denominator != 1){outputOne += "/" + denominator; outputTwo += "/" + denominator;}
+
+            return outputOne + ", " + outputTwo;
+
         }
 
         else{
+            // COMPLEX!
             discriminant *= -1; // Factor out "i" from the discriminant, incorporate i into the string instead
             int maxSquare = maxSquareFactor(discriminant);
-            int gcd = MathC.gcd(MathC.gcd(-b, maxSquare), 2 * a);
-            discriminant = discriminant/((int) Math.pow(maxSquare, 2)); // Here on out, discriminant represents the (simplified) value inside the square root
+            discriminant /= ((int) Math.pow(maxSquare, 2));
 
-            if(gcd == Math.abs(2 * a)){
-                if(discriminant == 1){
-                    if(gcd == maxSquare){return String.format("%d + i, %d - i", -b/gcd);}
-                    return String.format("%1$d + %2$di, %1$d - %2$di", -b/gcd, maxSquare/gcd);
-                }
-                return String.format("%1$d + %2$di√%3$d, %1$d - %2$di√%3$d", -b/gcd, maxSquare/gcd, discriminant);
-            }
-            if(discriminant == 1){return String.format("(%1$d + %2$di)/%3$d, (%1$d - i%2$d)/%3$d", -b/gcd, maxSquare/gcd, (2 * a)/gcd);}
+            int gcd = MathC.gcd(MathC.gcd(-b, maxSquare), denominator);
+            b /= gcd; maxSquare /= gcd; denominator /= gcd;
 
-            return String.format("(%1$d + %2$di√%3$d)/%4$d, (%1$d - %2$di√%3$d)/%4$d", -b/gcd, maxSquare/gcd, discriminant, (2 * a)/gcd);
+
+            if(b != 0 && denominator != 1){outputOne += "("; outputTwo += "(";}
+
+            if(b != 0){outputOne += -b + " + ";  outputTwo += -b + " - ";}
+            else {outputTwo += "-";}
+
+            if(maxSquare != 1){outputOne += maxSquare + "i"; outputTwo += maxSquare + "i";}
+            else{outputOne += "i"; outputTwo += "i";}
+
+            if(discriminant != 1){outputOne += "sqrt(" + discriminant + ")"; outputTwo += "sqrt(" + discriminant + ")";}
+
+            if(b != 0 && denominator != 1){outputOne += ")"; outputTwo += ")";}
+
+            if(denominator != 1){outputOne += "/" + denominator; outputTwo += "/" + denominator; }
+
+            return outputOne + ", " + outputTwo;
 
         }
 
@@ -74,5 +100,11 @@ public class QuadraticSolver{
         System.out.println(QuadraticSolver.quadSolver(coefficients2));
         int[] coefficients3 = {1, 0, -2};
         System.out.println(QuadraticSolver.quadSolver(coefficients3));
+        int[] coefficients4 = {1, -4, 4};
+        System.out.println(QuadraticSolver.quadSolver(coefficients4));
+        int[] coefficients5 = {1, 0, 1};
+        System.out.println(QuadraticSolver.quadSolver(coefficients5));
+        int[] coefficients6 = {2, 0, 13};
+        System.out.println(QuadraticSolver.quadSolver(coefficients6));
     }
 }
