@@ -1,7 +1,13 @@
 public class rootsSolver{
 	
 	public static String rootsSolver(int[] coefficients){
-        if(coefficients.length == 3){return QuadraticSolver.quadSolver(coefficients);} // Base case for polynomials length 3+
+        if(coefficients.length == 2){
+		Rational root = new Rational(-coefficients[1], coefficients[0]);
+		root.reduce();
+		return root.toString();
+	}
+		
+	if(coefficients.length == 3){return QuadraticSolver.quadSolver(coefficients);} // Base case for polynomials length 3+
         
         int numTerms = coefficients.length;
         int[] firstFactors = factors(coefficients[0]); // Determine leading term's factors
@@ -16,9 +22,10 @@ public class rootsSolver{
             int numerator = lastFactors[j];  // Factors of final term -> numerator of potential factor
             int denominator = firstFactors[i]; // Factors of leading term -> denominator of potential factor
             
-            // Simplify numerator and denominator by dividing them by their GCD
-            // numerator /= gcdER(numerator, denominator); 
-            // denominator /= gcdER(numerator, denominator);                          
+            // Simplify the fraction
+	    int gcd = MathC.gcd(numerator, denominator);
+            numerator /= gcd; 
+            denominator /= gcd;                          
             
             // For any given value as ax^b, a rational root can be represented as n/d, so ax^b = a(n/d)^b 
             // If you multiply all of the terms by the leading term's degree, then the terms can be represented as a(n)^(b)d^(degree - b)
@@ -30,26 +37,19 @@ public class rootsSolver{
                 sumNumNeg += coefficients[k] * (int) Math.pow(-numerator, numTerms - k - 1) * (int) Math.pow(denominator, k);
             }
             
-            if(sumNumPos == 0){
-                // Apply synthetic division to get quotient polynomial to be recursed upon
-                int[] quotient = syntheticDivision(coefficients, numerator, denominator); 
-                
-                // For integer values (where denominator is 1) - just print the numerator and recurse 
+            if(sumNumPos == 0 || sumNumNeg == 0){
+                if(sumNumNeg == 0){numerator *= -1;}
+		    
+                int[] quotient = syntheticDivision(coefficients, numerator, denominator); // Apply synthetic division to get quotient polynomial to be recursed upon 
                 if(denominator == 1) {return String.format("%d, ", numerator) + rootsSolver(quotient);} 
-                
-                // Otherwise, print numerator/denominator and recurse
                 else{return String.format("%d/%d, ", numerator, denominator) + rootsSolver(quotient);} 
             }
             
-            if(sumNumNeg == 0){
-                int[] quotient = syntheticDivision(coefficients, -numerator, denominator);
-                if(denominator == 1) {return String.format("%d, ", -numerator) + rootsSolver(quotient);} 
-                else{return String.format("%d/%d, ", -numerator, denominator) + rootsSolver(quotient);}
-            }
+            
          }
         
         }
-        return "";
+        return "No rational roots found!";
     } 
     
     public static int[] syntheticDivision(int[] polynomial, int numerator, int denominator){
@@ -92,15 +92,9 @@ public class rootsSolver{
 	    int[] coefficients5 = {2, -9, 23, -31, 15};
 	    int[] coefficients6 = {3, 41, 193, 279, -116};
 	    
-		// System.out.println(quadSolver(coefficients1));
 		System.out.println(rootsSolver(coefficients2));
 		System.out.println(rootsSolver(coefficients3));
-		// System.out.println(quadSolver(coefficients4));
 		System.out.println(rootsSolver(coefficients5));
 		System.out.println(rootsSolver(coefficients6));
-//		System.out.println(Maff.permute(5, 2));
-//		System.out.println(Maff.permute(7, 3)); 
-//		System.out.println(String.format("5 choose 3  = 5p3/3! = %d/%d = %d", Maff.permute(5, 3), Maff.factorial(3), Maff.permute(5, 3)/Maff.factorial(3)));
-//		System.out.println(Maff.choose(5, 3));
 	}
 }
