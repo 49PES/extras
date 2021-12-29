@@ -71,6 +71,11 @@ public class rootsSolver{
     } 
 
 	public static int[] factors(int val){
+	    if (val == 0){
+        	int[] factors = {0};
+            	return factors;
+             }
+		
 	    val = Math.abs(val);
 	    int counter = 0;
 	    for(int i = 1; i <= val; i++){
