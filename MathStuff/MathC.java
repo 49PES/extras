@@ -1,5 +1,6 @@
 public class MathC{
-
+    // Custom Math class
+    
     // Return greatest common divisor of two numbers
     public static int gcd( int n, int d ) {
         int a, b, x;
@@ -40,20 +41,20 @@ public class MathC{
         return permute(elements, elements - chosen) / factorial(elements - chosen);
     }
 
-    public static double binomPDF(double n, double r, double p){
-        return choose((int) n, (int) r) * Math.pow(p, r) * Math.pow(1 - p, n - r);
+    public static double binomPDF(int n, int r, double p){
+        return choose(n, r) * Math.pow(p, r) * Math.pow(1 - p, n - r);
     }
 
-    public static double binomCDF(double n, double r, double p, String type){
+    public static double binomCDF(int n, int r, double p, String type){
         double output = 0;
-        if(type.equals("at most") ){
+        if(type.equals("at most") || type.equals("<=")){
             for(int i = 0; i <= r; i++){
                 output += binomPDF(n, i, p);
             }
         }
 
-        else if(type.equals("at least") ) {
-            for(int i = (int) r; i <= n; i++){
+        else if(type.equals("at least") || type.equals(">=") ) {
+            for(int i = r; i <= n; i++){
                 output += binomPDF(n, i, p);
             }
         }
