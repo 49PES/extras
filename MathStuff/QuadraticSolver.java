@@ -38,7 +38,7 @@ public class QuadraticSolver{
 
             if(maxSquare != 1){outputOne += maxSquare + ""; outputTwo += maxSquare + "";}
 
-            if(discriminant != 1){outputOne += "sqrt(" + discriminant + ")"; outputTwo += "sqrt(" + discriminant + ")";}
+            if(discriminant != 1){outputOne += "\u221A(" + discriminant + ")"; outputTwo += "\u221A(" + discriminant + ")";}
 
             if(b != 0 && denominator != 1){outputOne += ")"; outputTwo += ")";}
 
@@ -66,7 +66,7 @@ public class QuadraticSolver{
             if(maxSquare != 1){outputOne += maxSquare + "i"; outputTwo += maxSquare + "i";}
             else{outputOne += "i"; outputTwo += "i";}
 
-            if(discriminant != 1){outputOne += "sqrt(" + discriminant + ")"; outputTwo += "sqrt(" + discriminant + ")";}
+            if(discriminant != 1){outputOne += "\u221A(" + discriminant + ")"; outputTwo += "\u221A(" + discriminant + ")";}
 
             if(b != 0 && denominator != 1){outputOne += ")"; outputTwo += ")";}
 
