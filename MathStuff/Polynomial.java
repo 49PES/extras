@@ -37,7 +37,6 @@ public class Polynomial {
                     if (coefficients[i] == -1 ){output += " - ";}
                     else{output += " + ";}
                 }
-                
                 if(numTerms - 1 - i == 1){output += "x";}
                 else{output += "x^" + (numTerms - 1 - i);}
             }
@@ -48,11 +47,31 @@ public class Polynomial {
         return output;
     }
 
+    public static int[] polyGenerator(int[] roots){
+        if(roots.length == 1){
+            int[] poly = new int[2];
+            poly[0] = 1;
+            poly[1] = -roots[0];
+            return poly;
+        }
+        int[] factor = new int[2];
+        factor[0] = 1; factor[1] = roots[roots.length - 1];
+        return multiply(factor, polyGenerator(Arrays.copyOfRange(roots, 0, roots.length - 1)));
+    }
+
     public static void main(String[] args) {
         int[] list1 = {1, 4, 3};
         int[] list2 = {2, 5, 1};
         System.out.println("(" + polyToString(list1) + ")(" + polyToString(list2) + ") = " );
         System.out.println(polyToString(multiply(list1, list2)));
+        int[] roots1 = {2};
+        // int[] roots2 = {2, 3};
+        // int[] roots3 = {2, 3, 4};
+        // int[] roots4 = {2, 3, 4, 5};
+        System.out.println(polyToString(polyGenerator(roots1)));
+        // System.out.println(polyToString(polyGenerator(roots2)));
+        // System.out.println(polyToString(polyGenerator(roots3)));
+        // System.out.println(polyToString(polyGenerator(roots4)));
     }
 
 }
