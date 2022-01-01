@@ -1,5 +1,5 @@
 public class MathC{
-    // Custom Math class
+    // Custom Math class!
     
     // Return greatest common divisor of two numbers
     public static int gcd( int n, int d ) {
@@ -20,6 +20,9 @@ public class MathC{
         return(a * b / gcd(a, b));
     }
 
+
+    // Probability Suite - Factorials, Permutations, Combinations, Binomial Probability & Cumulative Distributions
+    
     // For n, return n!
     public static int factorial(int num){
         int product = 1;
@@ -41,6 +44,7 @@ public class MathC{
         return permute(elements, elements - chosen) / factorial(elements - chosen);
     }
 
+    // Binomial Probability 
     public static double binomPDF(int n, int r, double p){
         return choose(n, r) * Math.pow(p, r) * Math.pow(1 - p, n - r);
     }
@@ -58,9 +62,36 @@ public class MathC{
                 output += binomPDF(n, i, p);
             }
         }
+        
+        else if(type.equals("<")){
+            for(int i = 0; i < r; i++){
+                output += binomPDF(n, i, p);
+            }
+        }
+        
+        else if(type.equals(">") ) {
+            for(int i = r + 1; i <= n; i++){
+                output += binomPDF(n, i, p);
+            }
+        }
+        
         return output;
     }
-
+    
+    public static void binomCDFAll(int n, int r, double p){
+        // Output similar to this: https://www.gigacalculator.com/calculators/binomial-probability-calculator.php
+        String output = "";
+        output += "Number of trials (n): " + n;
+        output += "\nNumber of events (r): " + r;
+        output += "\nProbability (p): " + p;
+        output += "\n\nProbability of R = " + r + " events:  " + binomPDF(n, r, p);
+        output += "\nProbability of R < " + r + " events:  " + binomCDF(n, r, p, "<");
+        output += "\nProbability of R \u2264 " + r + " events:  " + binomCDF(n, r, p, "<=");
+        output += "\nProbability of R > " + r + " events:  " + binomCDF(n, r, p, ">");
+        output += "\nProbability of R \u2265 " + r + " events:  " + binomCDF(n, r, p, ">=");
+        System.out.println(output);
+    }
+    
     // Trig functions Suite
 
     // Reciprocal Trig Functions
@@ -90,5 +121,6 @@ public class MathC{
         System.out.println(binomPDF(5, 2, 0.5) );
         System.out.println(binomCDF(5, 2, 0.5, "at most") );
         System.out.println(binomCDF(5, 2, 0.5, "at least") ); */
+        
     }
 }
