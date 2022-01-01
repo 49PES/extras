@@ -7,7 +7,7 @@ public class Polynomial {
         int sum = 0, iterLength;
         if(f.length > g.length){iterLength = f.length;} else {iterLength = g.length;}
         for(int m = 0; m < iterLength; m++){
-            if( !(m > f.length || n - m >= g.length || n - m < 0) ){
+            if( !(m >= f.length || n - m >= g.length || n - m < 0) ){
                 sum += f[m] * g[n - m];
             }
         }
@@ -23,9 +23,14 @@ public class Polynomial {
     public static String polyToString(int[] coefficients){
         int numTerms = coefficients.length;
         String output = "";
+        if(coefficients.length == 0){return output;}
+        if(coefficients.length == 1){return output + coefficients[0];}
+        
         if(coefficients[0] == -1){output += "-";}
-        else if(coefficients[0] != 1){output += coefficients[0] + "";}
-        output += "x^" + (numTerms - 1);
+        else if(coefficients[0] == 1){output += "x";}
+        else{output += coefficients[0] + "x";}
+
+        if(numTerms - 1 != 1){output += "^" + (numTerms - 1);}
 
         for(int i = 1; i < numTerms - 1; i++){
             if(coefficients[i] != 0){
@@ -64,14 +69,16 @@ public class Polynomial {
         int[] list2 = {2, 5, 1};
         System.out.println("(" + polyToString(list1) + ")(" + polyToString(list2) + ") = " );
         System.out.println(polyToString(multiply(list1, list2)));
-        int[] roots1 = {2};
-        // int[] roots2 = {2, 3};
-        // int[] roots3 = {2, 3, 4};
-        // int[] roots4 = {2, 3, 4, 5};
+
+        int[] roots1 = {2}; // (x - 2)
+        int[] roots2 = {2, 3}; // (x - 2)(x - 3) -> x^2 - 5x + 6
+        int[] roots3 = {2, 3, 4}; // (x - 2)(x - 3)(x - 4) = x^3 - 9x^2 + 26x - 24
+        int[] roots4 = {2, 3, 4, 5}; // (x - 2)(x - 3)(x - 4)(x - 5) = x^4 - 14x^3 + 71x^2 - 154x + 120
+
         System.out.println(polyToString(polyGenerator(roots1)));
-        // System.out.println(polyToString(polyGenerator(roots2)));
-        // System.out.println(polyToString(polyGenerator(roots3)));
-        // System.out.println(polyToString(polyGenerator(roots4)));
+        System.out.println(polyToString(polyGenerator(roots2)));
+        System.out.println(polyToString(polyGenerator(roots3)));
+        System.out.println(polyToString(polyGenerator(roots4)));
     }
 
 }
