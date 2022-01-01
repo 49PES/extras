@@ -40,8 +40,8 @@ public class MathC{
     // n-choose-k operation nCk = n! / (k! (n - k)!) = nPk/k!
     // optimized using permutation and factorial, factorial of the lower complement between n - k & k
     public static int choose(int elements, int chosen){
-        if(elements - chosen < chosen) return permute(elements, chosen) / factorial(chosen);
-        return permute(elements, elements - chosen) / factorial(elements - chosen);
+        if(elements - chosen < chosen) return permute(elements, elements - chosen) / factorial(elements - chosen);
+        return permute(elements, chosen) / factorial(chosen);
     }
 
     // Binomial Probability 
