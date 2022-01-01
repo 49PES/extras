@@ -55,7 +55,7 @@ public class Polynomial {
             return poly;
         }
         int[] factor = new int[2];
-        factor[0] = 1; factor[1] = roots[roots.length - 1];
+        factor[0] = 1; factor[1] = -roots[roots.length - 1];
         return multiply(factor, polyGenerator(Arrays.copyOfRange(roots, 0, roots.length - 1)));
     }
 
