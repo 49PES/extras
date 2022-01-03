@@ -1,5 +1,5 @@
 import java.util.Arrays;
-public class Main{
+public class LinearAlgebra{
 	public static double[][] multiply(double[][] A, double[][] B){
 	    // Returns product AB
 	    
