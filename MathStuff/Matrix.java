@@ -2,6 +2,7 @@ import java.util.Arrays;
 
 class Matrix{
     private double[][] matrix;
+    
     Matrix(double[] elements, int rows, int columns){
         if (rows * columns != elements.length) {throw new RuntimeException("Invalid dimensions for matrix multiplication.");}
         matrix = new double[rows][columns];
@@ -13,11 +14,16 @@ class Matrix{
             }
         }
     }
+    
+    Matrix(double[][] elements){
+        matrix = elements;
+    }   
    
     public void multiply(Matrix Transform){
 	    // Transform this matrix by the transform matrix
-	    double[][] A = this.matrix;
-	    double[][] B = Transform.matrix;
+	    // [Transform][this]
+	    double[][] A = Transform.matrix;
+	    double[][] B = this.matrix;
 	    
 	    // Throw a run time exception if the # of columns of A != # of rows of B
 	    // Matrix multiplication would be invalid otherwise
@@ -42,35 +48,56 @@ class Matrix{
 	
 	public void rotateCW(double angle){
 	   // Rotates a 2 x 2 matrix clockwise by the given angle quantity 
+	    
 	    double[] transformElements = new double[4];
 	    transformElements[0] = Math.cos(angle * Math.PI / 180);
 	    transformElements[1] = Math.sin(angle * Math.PI / 180);
-	    transformElements[2] = -transformElements[1]; 
-	    transformElements[3] = transformElements[0];
-	    
+	    transformElements[2] = -Math.sin(angle * Math.PI / 180); 
+	    transformElements[3] = Math.cos(angle * Math.PI / 180); 
+	    // [cos@ sin@ ]
+	    // [-sin@ cos@]
 	    Matrix Rotate = new Matrix(transformElements, 2, 2);
-	    this.multiply(Rotate);
-	    
+	    this.multiply(Rotate); 
 	}
+	
+	public void rotateCCW(double angle){
+	   // Rotates a 2 x 2 matrix counterclockwise by the given angle quantity 
+	    rotateCW(-angle);
+	}
+	
+	public void reflect(double m){
+	    // reflect a 2D point / vector over the line y = mx
+	  // Rotate point and reflection line until line is on x-axis
+	  // Negate j hat to reflect over x-axis
+	  // Rotate point and reflection line counterclockwise till line is back to original position
+	  // https://math.stackexchange.com/questions/525082/reflection-across-a-line 
+	  
+	   double[] reflectionElements = new double[4];
+	   reflectionElements[0] = (1 - m * m) / (m * m + 1);
+	   reflectionElements[1] = 2 * m;
+	   reflectionElements[2] = 2 * m;
+	   reflectionElements[3] = (m * m - 1) / (m * m + 1);
+        Matrix Reflect = new Matrix(reflectionElements, 2, 2);
+        this.multiply(Reflect);
+	   
+	}
+	
+	public void dilate(double scaleFactor){
+	    if(this.matrix.length != this.matrix[0].length){ System.out.println("Not a square matrix - no change made");  return; }
+	    double[][] dilationElements = new double[this.matrix.length][this.matrix.length];
+	    for(int i = 0; i < dilationElements.length; i++){
+	        dilationElements[i][i] = scaleFactor;
+	    }
+	    
+	    Matrix Dilation = new Matrix(dilationElements);
+	    
+	    this.multiply(Dilation);
+	}
+	
     public String matrixToString(){
         String output = "";    
         for(int i = 0; i < matrix.length; i++){output += "\n" + Arrays.toString(matrix[i]);}
         return output;
     }
-  public static void main(String[] args) {
-		double[] elements = {2, 0, 0, 0, 2, 0, 0, 0, 2};
-		Matrix identityCrisis = new Matrix(elements, 3, 3);
-		System.out.println(identityCrisis.matrixToString() );
-		double[] elements2 = {1, 2, 21, 7, 8, 21, 11, 8, 21};
-		Matrix numbers = new Matrix(elements2, 3, 3);
-		System.out.println(numbers.matrixToString() );
-		numbers.multiply(identityCrisis);
-		System.out.println(numbers.matrixToString() );
-		
-		double[] bobby = {5, 7, 9, 11};
-		Matrix odd = new Matrix(bobby, 2, 2);
-		System.out.println(odd.matrixToString() ); 
-		odd.rotateCW(90);
-		System.out.println(odd.matrixToString() ); 
-	}
+  
 }
