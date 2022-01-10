@@ -19,10 +19,10 @@ class Matrix{
         matrix = elements;
     }   
    
-    public void multiply(Matrix Transform){
+    public void multiply(Matrix transform){
 	    // Transform this matrix by the transform matrix
 	    // [Transform][this]
-	    double[][] A = Transform.matrix;
+	    double[][] A = transform.matrix;
 	    double[][] B = this.matrix;
 	    
 	    // Throw a run time exception if the # of columns of A != # of rows of B
@@ -56,8 +56,8 @@ class Matrix{
 	    transformElements[3] = Math.cos(angle * Math.PI / 180); 
 	    // [cos@ sin@ ]
 	    // [-sin@ cos@]
-	    Matrix Rotate = new Matrix(transformElements, 2, 2);
-	    this.multiply(Rotate); 
+	    Matrix rotate = new Matrix(transformElements, 2, 2);
+	    this.multiply(rotate); 
 	}
 	
 	public void rotateCCW(double angle){
@@ -77,7 +77,7 @@ class Matrix{
 	   reflectionElements[1] = 2 * m;
 	   reflectionElements[2] = 2 * m;
 	   reflectionElements[3] = (m * m - 1) / (m * m + 1);
-        Matrix Reflect = new Matrix(reflectionElements, 2, 2);
+        Matrix reflect = new Matrix(reflectionElements, 2, 2);
         this.multiply(Reflect);
 	   
 	}
@@ -89,9 +89,9 @@ class Matrix{
 	        dilationElements[i][i] = scaleFactor;
 	    }
 	    
-	    Matrix Dilation = new Matrix(dilationElements);
+	    Matrix dilation = new Matrix(dilationElements);
 	    
-	    this.multiply(Dilation);
+	    this.multiply(dilation);
 	}
 	
     public String matrixToString(){
