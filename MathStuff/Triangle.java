@@ -4,18 +4,21 @@ public class Triangle {
     private int numSides, numAngles;
 
     public Triangle() {
-        this(0, 0, 0, 0, 0, 0);
+        this(0, 0, 0, 0, 0, 0, 0);
     }
 
-    public Triangle(double a, double b, double c, double d, double e, double f) {
+    public Triangle(double a, double b, double c, double d, double e, double f, double g) {
         sideA = a;
         sideB = b;
         sideC = c;
+
         angleA = d;
         angleB = e;
         angleC = f;
 
         this.enumerate();
+
+        area = g; // For weird situations when area is given & two sides (heron updates the area to an invalid value)
         this.lawOfSines();
         this.lawOfCosines();
         this.enumerate();
@@ -31,6 +34,8 @@ public class Triangle {
         if (angleA != 0.0) numAngles++;
         if (angleB != 0.0) numAngles++;
         if (angleC != 0.0) numAngles++;
+
+        // Deduce third angle given two angles using 180 - <1 - <2
         if (numAngles == 2) {
             if (angleA == 0.0) {
                 angleA = 180 - angleB - angleC;
@@ -116,7 +121,13 @@ public class Triangle {
 
 
     private void lawOfSines() {
-        enumerate();
+      // Two sides & area case (Have to assume acute angle D:  )
+        if(numSides == 2 && area > 0) {
+          if(sideA > 0 && sideB > 0) {angleC = lawOfSinesHelperSSArea(sideA, sideB, area); lawOfCosines(); }
+          if(sideA > 0 && sideC > 0) {angleB = lawOfSinesHelperSSArea(sideA, sideC, area); lawOfCosines(); }
+          if(sideB > 0 && sideC > 0) {angleA = lawOfSinesHelperSSArea(sideB, sideC, area); lawOfCosines(); }
+         }
+
         // ASA Cases
         if (numAngles >= 2 && numSides >= 1) {
 
@@ -157,35 +168,35 @@ public class Triangle {
             if(sideC == 0.0 && (angleA >= 90.0 || angleB >= 90.0 ) ){
                 if(angleA == 0.0){
                     angleA = lawOfSinesHelperSSA(sideB, sideA, angleB);
-                    lawOfSines();
+                    enumerate(); lawOfSines();
                 }
 
                 if(angleB == 0.0){
                     angleB = lawOfSinesHelperSSA(sideA, sideB, angleA);
-                    lawOfSines();
+                    enumerate(); lawOfSines();
                 }
             }
 
             if(sideA == 0.0 && (angleB >= 90.0 || angleC >= 90.0 ) ){
                 if(angleB == 0.0){
                     angleB = lawOfSinesHelperSSA(sideC, sideB, angleC);
-                    lawOfSines();
+                    enumerate(); lawOfSines();
                 }
                 if(angleC == 0.0){
                     angleC = lawOfSinesHelperSSA(sideB, sideC, angleB);
-                    lawOfSines();
+                    enumerate(); lawOfSines();
                 }
             }
 
             if(sideB == 0.0 &&  (angleA >= 90.0 || angleC >= 90.0 ) ){
                 if(angleA == 0.0){
                     angleA = lawOfSinesHelperSSA(sideC, sideA, angleC);
-                    lawOfSines();
+                    enumerate(); lawOfSines();
                 }
 
                 if(angleC == 0.0){
                     angleC = lawOfSinesHelperSSA(sideA, sideC, angleA);
-                    lawOfSines();
+                    enumerate(); lawOfSines();
                 }
             }
 
@@ -207,6 +218,18 @@ public class Triangle {
         // e.g. angleC = Math.asin( (sideC * Math.sin(angleA * Math.PI / 180)) / sideA  ) * 180 / Math.PI;
 
         return MathC.asind( (side2 * MathC.sind(angle1)) / side1 );
+    }
+
+    private double lawOfSinesHelperSSArea(double side1, double side2, double area){
+      // Given two sides of a triangle and the area of the triangle, you can determine the angle between the two sides*
+      // * assume the angle is <= 90
+      /* (a * b * sinC) / 2 = area   [Projection of a or b with * sinC to become the height]
+      a * b * sinC = 2 * area
+      sinC = (2 * area) / (a * b)
+      C = arcsin( (2 * area) / (a * b)  )
+      */
+      return MathC.asind( (2 * area) / (side1 * side2) );
+
     }
 
     public String toString() {
@@ -236,19 +259,21 @@ public class Triangle {
         Triangle dmOne = new Triangle(15, 21, 29, 0, 0, 0);
         System.out.println(dmOne.toString()); */
           while(true){
-            System.out.print("Would you like to exit? Y / N ");
-              String input = sc.next();
-            if(input.equals("Y")){break;}
             System.out.println("Please input the values for your triangle, inputting 0 where unknown");
-            double sA, sB, sC, aA, aB, aC;
+            double sA, sB, sC, aA, aB, aC, area;
             System.out.print("Side A = "); sA = sc.nextDouble();
             System.out.print("Side B = "); sB = sc.nextDouble();
             System.out.print("Side C = "); sC = sc.nextDouble();
             System.out.print("Angle A = "); aA = sc.nextDouble();
             System.out.print("Angle B = "); aB = sc.nextDouble();
             System.out.print("Angle C = "); aC = sc.nextDouble();
-            temp = new Triangle(sA, sB, sC, aA, aB, aC);
+            System.out.print("Area = "); area = sc.nextDouble();
+            temp = new Triangle(sA, sB, sC, aA, aB, aC, area);
             System.out.println( temp.toString() );
+
+            System.out.print("Would you like to exit? Y / N ");
+            String input = sc.next();
+            if(input.equals("Y")){break;}
           }
 
     }
