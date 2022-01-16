@@ -123,9 +123,9 @@ public class Triangle {
     private void lawOfSines() {
       // Two sides & area case (Have to assume acute angle D:  )
         if(numSides == 2 && area > 0) {
-          if(sideA > 0 && sideB > 0) {angleC = lawOfSinesHelperSSArea(sideA, sideB, area); lawOfCosines(); }
-          if(sideA > 0 && sideC > 0) {angleB = lawOfSinesHelperSSArea(sideA, sideC, area); lawOfCosines(); }
-          if(sideB > 0 && sideC > 0) {angleA = lawOfSinesHelperSSArea(sideB, sideC, area); lawOfCosines(); }
+          if(sideA > 0 && sideB > 0) angleC = lawOfSinesHelperSSArea(sideA, sideB, area); lawOfCosines();
+          if(sideA > 0 && sideC > 0) angleB = lawOfSinesHelperSSArea(sideA, sideC, area); lawOfCosines();
+          if(sideB > 0 && sideC > 0) angleA = lawOfSinesHelperSSArea(sideB, sideC, area); lawOfCosines(); 
          }
 
         // ASA Cases

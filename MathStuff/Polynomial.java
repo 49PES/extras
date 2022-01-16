@@ -1,6 +1,13 @@
 import java.util.Arrays;
+import java.util.Scanner;
 public class Polynomial {
-    public static int conv(int[] f, int[] g, int n){
+    private int[] polynomial;
+    Polynomial(int[] values, String type){
+      if(type.equals("coefficients")) polynomial = values;
+      if(type.equals("roots")) polynomial = polyGenerator(values);
+    }
+
+    static int conv(int[] f, int[] g, int n){
         // https://www.wikiwand.com/en/Convolution#/Discrete_convolution
         // (f * g)[n] = sum_{m = -infty}^{infty} f[m]g[n - m]
 
@@ -14,18 +21,19 @@ public class Polynomial {
         return sum;
     }
 
-    public static int[] multiply(int[] f, int[] g){
+    static int[] multiply(int[] f, int[] g){
         int[] product = new int[f.length + g.length - 1];
         for(int i = 0; i < product.length; i++) {product[i] = conv(f, g, i);}
         return product;
     }
 
-    public static String polyToString(int[] coefficients){
+    String polyToString(){
+        int[] coefficients = polynomial;
         int numTerms = coefficients.length;
         String output = "";
         if(coefficients.length == 0){return output;}
         if(coefficients.length == 1){return output + coefficients[0];}
-        
+
         if(coefficients[0] == -1){output += "-";}
         else if(coefficients[0] == 1){output += "x";}
         else{output += coefficients[0] + "x";}
@@ -52,7 +60,7 @@ public class Polynomial {
         return output;
     }
 
-    public static int[] polyGenerator(int[] roots){
+    static int[] polyGenerator(int[] roots){
         if(roots.length == 1){
             int[] poly = new int[2];
             poly[0] = 1;
@@ -65,20 +73,51 @@ public class Polynomial {
     }
 
     public static void main(String[] args) {
-        int[] list1 = {1, 4, 3};
-        int[] list2 = {2, 5, 1};
-        System.out.println("(" + polyToString(list1) + ")(" + polyToString(list2) + ") = " );
-        System.out.println(polyToString(multiply(list1, list2)));
+        Scanner sc = new Scanner(System.in);
+        String type; Polynomial temp = new Polynomial(new int[0], "coefficients");
+        int[] factor1 = {1, -4};
+        int[] factor2 = {1, -12, 50};
+        Polynomial a = new Polynomial(multiply(factor1, factor2), "coefficients");
+        System.out.println(a.polyToString());
+        while(true){
+          System.out.println("Would you like to provide the [roots] of your polynomial or the [coefficients]?");
+          type = sc.next();
 
-        int[] roots1 = {2}; // (x - 2)
-        int[] roots2 = {2, 3}; // (x - 2)(x - 3) -> x^2 - 5x + 6
-        int[] roots3 = {2, 3, 4}; // (x - 2)(x - 3)(x - 4) = x^3 - 9x^2 + 26x - 24
-        int[] roots4 = {2, 3, 4, 5}; // (x - 2)(x - 3)(x - 4)(x - 5) = x^4 - 14x^3 + 71x^2 - 154x + 120
+          if(type.toLowerCase().equals("coefficients") ){
+          System.out.print("What is the degree of your polynomial? ");
+          int degree = sc.nextInt();
+          int[] values = new int[degree + 1];
 
-        System.out.println(polyToString(polyGenerator(roots1)));
-        System.out.println(polyToString(polyGenerator(roots2)));
-        System.out.println(polyToString(polyGenerator(roots3)));
-        System.out.println(polyToString(polyGenerator(roots4)));
+          System.out.print("Enter the coefficients for the following terms: \n");
+          for(int i = degree; i >= 0; i--){
+            System.out.print("x^" + i + ": ");
+            values[degree - i] = sc.nextInt();
+          }
+
+          temp = new Polynomial(values, "coefficients");
+        }
+
+          if(type.toLowerCase().equals("roots")){
+          System.out.print("How many roots do you have? ");
+          int numRoots = sc.nextInt();
+          int[] roots = new int[numRoots];
+          System.out.println("Enter the roots of your polnomial");
+          for(int i = 0; i < roots.length; i++){
+            System.out.print("r" + (i + 1) + ": ");
+            roots[i] = sc.nextInt();
+          }
+          temp = new Polynomial(roots, "roots");
+        }
+
+          System.out.println("Your polynomial is: " + temp.polyToString());
+          System.out.print("Would you like the roots of your polynomial? Y / N ");
+          if(sc.next().equals("Y")){
+            System.out.println(rootsSolver.rootsSolver(temp.polynomial));
+          }
+          System.out.print("Would you like to exit? Y / N ");
+          String input = sc.next();
+          if(input.equals("Y")){break;}
+         }
     }
 
 }
