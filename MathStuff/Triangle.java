@@ -1,3 +1,4 @@
+import java.util.Scanner;
 public class Triangle {
     private double sideA, sideB, sideC, angleA, angleB, angleC, area, perimeter;
     private int numSides, numAngles;
@@ -50,7 +51,7 @@ public class Triangle {
     private void heron() {
         // Area of a triangle =sqrt( s(s - a)(s - b)(s - b) ) w/ Heron's Formula
         area = perimeter / 2; // s = (a + b + c) / 2  <- Semi-Perimeter of the Triangle
-        area *= (area - sideA) * (area - sideB) * (area - sideC); 
+        area *= (area - sideA) * (area - sideB) * (area - sideC);
         area = Math.sqrt(area);
     }
 
@@ -120,32 +121,32 @@ public class Triangle {
         if (numAngles >= 2 && numSides >= 1) {
 
             if (sideA != 0.0 && angleA != 0.0 && angleB != 0.0 && sideB == 0.0) {
-                sideB = lawOfSinesHelperASA(sideA, angleA, angleB); 
+                sideB = lawOfSinesHelperASA(sideA, angleA, angleB);
                 lawOfCosines();
             }
 
             if (sideB != 0.0 && angleB != 0.0 && angleA != 0.0 && sideA == 0.0) {
-                sideA = lawOfSinesHelperASA(sideB, angleB, angleA); 
+                sideA = lawOfSinesHelperASA(sideB, angleB, angleA);
                 lawOfCosines();
             }
 
             if (sideA != 0.0 && angleA != 0.0 && angleC != 0.0 && sideC == 0.0) {
-                sideC = lawOfSinesHelperASA(sideA, angleA, angleC); 
+                sideC = lawOfSinesHelperASA(sideA, angleA, angleC);
                 lawOfCosines();
             }
 
             if (sideC != 0.0 && angleC != 0.0 && angleA != 0.0 && sideA == 0.0) {
-                sideA = lawOfSinesHelperASA(sideC, angleC, angleA); 
+                sideA = lawOfSinesHelperASA(sideC, angleC, angleA);
                 lawOfCosines();
             }
 
             if (sideB != 0.0 && angleB != 0.0 && angleC != 0.0 && sideC == 0.0) {
-                sideC = lawOfSinesHelperASA(sideB, angleB, angleC); 
+                sideC = lawOfSinesHelperASA(sideB, angleB, angleC);
                 lawOfCosines();
             }
 
             if (sideC != 0.0 && angleC != 0.0 && angleB != 0.0 && sideB == 0.0) {
-                sideB = lawOfSinesHelperASA(sideC, angleC, angleB); 
+                sideB = lawOfSinesHelperASA(sideC, angleC, angleB);
                 lawOfCosines();
             }
         }
@@ -154,25 +155,25 @@ public class Triangle {
         if(numSides == 2 && numAngles == 1) {
 
             if(sideC == 0.0 && (angleA >= 90.0 || angleB >= 90.0 ) ){
-                if(angleA == 0.0){ 
+                if(angleA == 0.0){
                     angleA = lawOfSinesHelperSSA(sideB, sideA, angleB);
-                    lawOfSines();  
+                    lawOfSines();
                 }
-                
-                if(angleB == 0.0){ 
-                    angleB = lawOfSinesHelperSSA(sideA, sideB, angleA); 
-                    lawOfSines(); 
+
+                if(angleB == 0.0){
+                    angleB = lawOfSinesHelperSSA(sideA, sideB, angleA);
+                    lawOfSines();
                 }
             }
 
             if(sideA == 0.0 && (angleB >= 90.0 || angleC >= 90.0 ) ){
-                if(angleB == 0.0){ 
-                    angleB = lawOfSinesHelperSSA(sideC, sideB, angleC); 
-                    lawOfSines(); 
-                }   
-                if(angleC == 0.0){ 
-                    angleC = lawOfSinesHelperSSA(sideB, sideC, angleB); 
-                    lawOfSines(); 
+                if(angleB == 0.0){
+                    angleB = lawOfSinesHelperSSA(sideC, sideB, angleC);
+                    lawOfSines();
+                }
+                if(angleC == 0.0){
+                    angleC = lawOfSinesHelperSSA(sideB, sideC, angleB);
+                    lawOfSines();
                 }
             }
 
@@ -181,10 +182,10 @@ public class Triangle {
                     angleA = lawOfSinesHelperSSA(sideC, sideA, angleC);
                     lawOfSines();
                 }
-                
+
                 if(angleC == 0.0){
-                    angleC = lawOfSinesHelperSSA(sideA, sideC, angleA); 
-                    lawOfSines(); 
+                    angleC = lawOfSinesHelperSSA(sideA, sideC, angleA);
+                    lawOfSines();
                 }
             }
 
@@ -221,6 +222,8 @@ public class Triangle {
     }
 
     public static void main(String[] args) {
+      Scanner sc = new Scanner(System.in);
+      Triangle temp = new Triangle();
         /* Triangle babyRight = new Triangle(3, 4, 0, 0, 0, 90);
         Triangle equilateral = new Triangle(4, 4, 4, 0, 0, 0);
         Triangle threeSixNine = new Triangle(2, 2 * Math.sqrt(3), 0, 30, 60, 0);
@@ -229,5 +232,24 @@ public class Triangle {
         System.out.println("\n" +fourFive.toString());
         Triangle threeFive = new Triangle(3, 0, 5, 0, 0, 90);
         System.out.println("\n" + threeFive.toString()); */
+        /*
+        Triangle dmOne = new Triangle(15, 21, 29, 0, 0, 0);
+        System.out.println(dmOne.toString()); */
+          while(true){
+            System.out.print("Would you like to exit? Y / N ");
+              String input = sc.next();
+            if(input.equals("Y")){break;}
+            System.out.println("Please input the values for your triangle, inputting 0 where unknown");
+            double sA, sB, sC, aA, aB, aC;
+            System.out.print("Side A = "); sA = sc.nextDouble();
+            System.out.print("Side B = "); sB = sc.nextDouble();
+            System.out.print("Side C = "); sC = sc.nextDouble();
+            System.out.print("Angle A = "); aA = sc.nextDouble();
+            System.out.print("Angle B = "); aB = sc.nextDouble();
+            System.out.print("Angle C = "); aC = sc.nextDouble();
+            temp = new Triangle(sA, sB, sC, aA, aB, aC);
+            System.out.println( temp.toString() );
+          }
+
     }
 }
