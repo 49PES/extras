@@ -21,78 +21,6 @@ public class MathC{
         return(a * b / gcd(a, b));
     }
 
-/**
-    // Probability Suite - Factorials, Permutations, Combinations, Binomial Probability & Cumulative Distributions
-
-    // For n, return n!
-    public static int factorial(int num){
-        int product = 1;
-        for(int i = 1; i <= num; i++){ product *= i;}
-        return product;
-    }
-
-    // n-permute-k operation = n!/(n - k)!, or n * (n - 1) * (n - 2) * ...(n - (k - 1)) {first k terms of n!}
-    public static int permute(int elements, int chosen){
-        int product = 1;
-        for(int i = elements; i > elements - chosen; i--){product *= i;}
-        return product;
-    }
-
-    // n-choose-k operation nCk = n! / (k! (n - k)!) = nPk/k!
-    // optimized using permutation and factorial, factorial of the lower complement between n - k & k
-    public static int choose(int elements, int chosen){
-        if(elements - chosen < chosen) return permute(elements, elements - chosen) / factorial(elements - chosen);
-        return permute(elements, chosen) / factorial(chosen);
-    }
-
-    // Binomial Probability
-    public static double binomPDF(int n, int r, double p){
-        return choose(n, r) * Math.pow(p, r) * Math.pow(1 - p, n - r);
-    }
-
-    public static double binomCDF(int n, int r, double p, String type){
-        double output = 0;
-        if(type.equals("at most") || type.equals("<=")){
-            for(int i = 0; i <= r; i++){
-                output += binomPDF(n, i, p);
-            }
-        }
-
-        else if(type.equals("at least") || type.equals(">=") ) {
-            for(int i = r; i <= n; i++){
-                output += binomPDF(n, i, p);
-            }
-        }
-
-        else if(type.equals("<")){
-            for(int i = 0; i < r; i++){
-                output += binomPDF(n, i, p);
-            }
-        }
-
-        else if(type.equals(">") ) {
-            for(int i = r + 1; i <= n; i++){
-                output += binomPDF(n, i, p);
-            }
-        }
-
-        return output;
-    }
-
-    public static void binomCDFAll(int n, int r, double p){
-        // Output similar to this: https://www.gigacalculator.com/calculators/binomial-probability-calculator.php
-        String output = "";
-        output += "Number of trials (n): " + n;
-        output += "\nNumber of events (r): " + r;
-        output += "\nProbability (p): " + p;
-        output += "\n\nProbability of R = " + r + " events:  " + binomPDF(n, r, p);
-        output += "\nProbability of R < " + r + " events:  " + binomCDF(n, r, p, "<");
-        output += "\nProbability of R \u2264 " + r + " events:  " + binomCDF(n, r, p, "<=");
-        output += "\nProbability of R > " + r + " events:  " + binomCDF(n, r, p, ">");
-        output += "\nProbability of R \u2265 " + r + " events:  " + binomCDF(n, r, p, ">=");
-        System.out.println(output);
-    }
-**/
     // Trig functions Suite
 
     // Reciprocal Trig Functions
@@ -121,9 +49,10 @@ public class MathC{
       int task;
       Polynomial tempPoly = new Polynomial(new int[1], "roots");
       Triangle tempTriangle = new Triangle();
-      System.out.println("Welcome to this custom math class!");
+      System.out.println("Welcome to this custom math class!\nPlease enter numerical values to navigate.");
+
       while(true){
-        System.out.println("\nWhat would you like to do?\n[1] Polynomials\n[2] Triangles\n[3] Probability\n[4] End MathC session");
+        System.out.println("\nWhat would you like to do?\n[1] Polynomials\n[2] Triangles\n[3] Probability \n[4] Trigonometry\n[5] End MathC session");
         task = sc.nextInt();
         if(task == 1){
           int type;
@@ -170,15 +99,14 @@ public class MathC{
         if(task == 2){
           while(true){
           System.out.println("Please input the values for your triangle, inputting 0 where unknown");
-          double sA, sB, sC, aA, aB, aC, area;
+          double sA, sB, sC, aA, aB, aC;
           System.out.print("Side A = "); sA = sc.nextDouble();
           System.out.print("Side B = "); sB = sc.nextDouble();
           System.out.print("Side C = "); sC = sc.nextDouble();
           System.out.print("Angle A = "); aA = sc.nextDouble();
           System.out.print("Angle B = "); aB = sc.nextDouble();
           System.out.print("Angle C = "); aC = sc.nextDouble();
-          System.out.print("Area = "); area = sc.nextDouble();
-          tempTriangle = new Triangle(sA, sB, sC, aA, aB, aC, area);
+          tempTriangle = new Triangle(sA, sB, sC, aA, aB, aC);
           System.out.println( tempTriangle.toString() );
 
           System.out.print("Would you like to exit Triangle? Y / N ");
@@ -216,7 +144,62 @@ public class MathC{
           }
         }
         }
-        if(task == 4){break;}
+        if(task == 4){
+          boolean inRadians = true; int trigType;
+          while(true) {
+            System.out.println("What would you like to do? \n[1] Change radians/degrees \n[2] Evaluate a trig function \n[3] Exit Trigonometry" );
+            trigType = sc.nextInt();
+            if(trigType == 1){
+              if(inRadians) {inRadians = false; System.out.println("Changed to degree mode\n");}
+              else{inRadians = true; System.out.println("Changed to radian mode\n");}
+            }
+            if(trigType == 2){
+              System.out.println("What what you like to evaluate? \n[1] Sin \n[2] Cos \n[3] Tan \n[4] Csc \n[5] Sec \n[6] Cot \n[7] Arcsin \n[8] Arccos \n[9] Arctan" );
+              int trigFxn = sc.nextInt();
+              System.out.println("What input would you like to input?");
+              int val = sc.nextInt();
+              if(trigFxn == 1){
+                if(inRadians){System.out.println("sin(" + val + ") = " + Math.sin(val) ); }
+                else {System.out.println("sin(" + val + "\u00b0) = " + MathC.sind(val) );}
+              }
+              if(trigFxn == 2){
+                if(inRadians){System.out.println("cos(" + val + ") = " + Math.cos(val) ); }
+                else {System.out.println("cos(" + val + "\u00b0) = " + MathC.cosd(val) );}
+              }
+              if(trigFxn == 3){
+                if(inRadians){System.out.println("tan(" + val + ") = " + Math.tan(val) ); }
+                else {System.out.println("tan(" + val + "\u00b0) = " + MathC.tand(val) );}
+              }
+              if(trigFxn == 4){
+                if(inRadians){System.out.println("csc(" + val + ") = " + MathC.csc(val) ); }
+                else {System.out.println("csc(" + val + "\u00b0) = " + MathC.cscd(val) ); }
+              }
+              if(trigFxn == 5){
+                if(inRadians){System.out.println("sec(" + val + ") = " + MathC.sec(val) ); }
+                else {System.out.println("sec(" + val + "\u00b0) = " + MathC.secd(val) ); }
+              }
+              if(trigFxn == 6){
+                if(inRadians){System.out.println("cot(" + val + ") = " + MathC.cot(val) ); }
+                else {System.out.println("cot(" + val + "\u00b0) = " + MathC.cotd(val) ); }
+              }
+              if(trigFxn == 7){
+                if(inRadians){System.out.println("arcsin(" + val + ") = " + Math.asin(val));}
+                else{System.out.println("arcsin(" + val + ") = " + MathC.asind(val) + "\u00b0");}
+              }
+              if(trigFxn == 8){
+                if(inRadians){System.out.println("arccos(" + val + ") = " + Math.acos(val));}
+                else{System.out.println("arccos(" + val + ") = " + MathC.acosd(val) + "\u00b0");}
+              }
+              if(trigFxn == 9){
+                if(inRadians){System.out.println("arctan(" + val + ") = " + Math.atan(val));}
+                else{System.out.println("arctan(" + val + ") = " + MathC.atand(val) + "\u00b0");}
+              }
+            }
+
+            if(trigType == 3) break;
+          }
+        }
+        if(task == 5){break;}
       }
 
     }

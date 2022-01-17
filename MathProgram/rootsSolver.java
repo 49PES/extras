@@ -2,12 +2,13 @@ public class rootsSolver{
 
 	public static String rootsSolver(int[] coefficients){
         if(coefficients.length == 2){
-		Rational root = new Rational(-coefficients[1], coefficients[0]);
-		root.reduce();
-		return root.toString();
-	}
+					// mx + b = 0, x = -b/m
+					Rational root = new Rational(-coefficients[1], coefficients[0]);
+					root.reduce();
+					return root.toString();
+				}
 
-	if(coefficients.length == 3){return QuadraticSolver.quadSolver(coefficients);} // Base case for polynomials length 3+
+				if(coefficients.length == 3){return QuadraticSolver.quadSolver(coefficients);} // Base case for polynomials length 3+
 
         int numTerms = coefficients.length;
         int[] firstFactors = factors(coefficients[0]); // Determine leading term's factors
@@ -23,36 +24,38 @@ public class rootsSolver{
             int denominator = firstFactors[i]; // Factors of leading term -> denominator of potential factor
 
             // Simplify the fraction
-	    int gcd = MathC.gcd(numerator, denominator);
+	    			int gcd = MathC.gcd(numerator, denominator);
             numerator /= gcd;
             denominator /= gcd;
 
             // For any given value as ax^b, a rational root can be represented as n/d, so ax^b = a(n/d)^b
             // If you multiply all of the terms by the leading term's degree, then the terms can be represented as a(n)^(b)d^(degree - b)
-            // e. g. (5(-4/5)^3     - 16(-4/5)^2      + 9(-4/5)^1 +   20 )          * 5^3 =
+						// Avoids floating point inaccuracies by keeping everything as ints
+						// e. g. (5(-4/5)^3     - 16(-4/5)^2      + 9(-4/5)^1 +   20 )  * 5^3 =
             //       5(-4)^3(5)^0  - 16(-4)^2(5)^1   +9(-4)^1(5)^2  + 20(-4)^0(5)^3
 
-            for(int k = 0; k < numTerms; k++){
+						// e. g. 4/7 - 3/21 - 3/7 = 0/21 <- only the numerator being 0 is relevant
+						for(int k = 0; k < numTerms; k++){
+								// Try n/d and -n/d simultaneously
                 sumNumPos += coefficients[k] * (int) Math.pow(numerator, numTerms - k - 1) * (int) Math.pow(denominator, k);
                 sumNumNeg += coefficients[k] * (int) Math.pow(-numerator, numTerms - k - 1) * (int) Math.pow(denominator, k);
             }
 
+						// According to the remainder theorem, for a polynomial P(x), if P(b) = 0, then "b" is a root of P(x)
+						// Factor out (x - b) from the polynomial accordingly and repeat
             if(sumNumPos == 0 || sumNumNeg == 0){
-                if(sumNumNeg == 0){numerator *= -1;}
+                if(sumNumNeg == 0) numerator *= -1;
 
-                int[] quotient = syntheticDivision(coefficients, numerator, denominator); // Apply synthetic division to get quotient polynomial to be recursed upon
-                if(denominator == 1) {return String.format("%d, ", numerator) + rootsSolver(quotient);}
-                else{return String.format("%d/%d, ", numerator, denominator) + rootsSolver(quotient);}
+								int[] quotient = syntheticDivision(coefficients, numerator, denominator); // Apply synthetic division to get quotient polynomial to be recursed upon
+                if(denominator == 1) {return numerator + ", " + rootsSolver(quotient);}
+                else{return numerator + "/" + denominator + ", " + rootsSolver(quotient);}
             }
-
-
          }
-
         }
         return "No rational roots found!";
     }
 
-    public static int[] syntheticDivision(int[] polynomial, int numerator, int denominator){
+  public static int[] syntheticDivision(int[] polynomial, int numerator, int denominator){
     /* An application of synthetic division! Involves a rational root (numerator/denominator) that is a factor of the polynomial
     First coefficient of the quotient polynomial is the same as the first coefficient of the original polynomial
     Thereafter, multiply the previous coefficient by the root (numerator/denominator),
@@ -71,12 +74,13 @@ public class rootsSolver{
     }
 
 	public static int[] factors(int val){
-	    if (val == 0){
-        	int[] factors = {0};
-            	return factors;
-             }
+		 // return an array of all the (positive) factors of a given val
+			if (val == 0){
+            	return new int[1]; // if the last term of a polynomial is 0, then it is factorable by x and x = 0 is a factor
+							// e. g. 5x^3 + 40x^2 + 30x + 0 = 0  being factored as x(5x^2 + 40x + 30)= 0, x = 0 is a factor
+      }
 
-	    val = Math.abs(val);
+	    val = Math.abs(val); // Use the absolute value of the value while finding factors - (+) and (-) factors are both applied anyway
 	    int counter = 0;
 	    for(int i = 1; i <= val; i++){
 	        if (val % i == 0){counter++;}
@@ -88,18 +92,4 @@ public class rootsSolver{
 	    }
 	    return factors;
 	}
-	/*
-	public static void main(String[] args) {
-	    int[] coefficients1 = {1, 6, 5}; // x^2 + 6x + 5 = 0
-	    int[] coefficients2 = {2, 11, 47, -124, -510}; // 2x^4 + 11x^3 + 47x^2 - 124 = 0
-	    int[] coefficients3 = {3, 7, -31, -167, -52}; // 3x^4 + 7x^3 - 31x^2 -167x - 52 = 0
-	    int[] coefficients4 = {2, -3, 1};
-	    int[] coefficients5 = {2, -9, 23, -31, 15};
-	    int[] coefficients6 = {3, 41, 193, 279, -116};
-
-		System.out.println(rootsSolver(coefficients2));
-		System.out.println(rootsSolver(coefficients3));
-		System.out.println(rootsSolver(coefficients5));
-		System.out.println(rootsSolver(coefficients6));
-	} */
 }
