@@ -156,7 +156,7 @@ public class MathC{
             if(trigType == 2){
               System.out.println("What what you like to evaluate? \n[1] Sin \n[2] Cos \n[3] Tan \n[4] Csc \n[5] Sec \n[6] Cot \n[7] Arcsin \n[8] Arccos \n[9] Arctan" );
               int trigFxn = sc.nextInt();
-              System.out.println("What input would you like to input?");
+              System.out.println("What value would you like to input?");
               int val = sc.nextInt();
               if(trigFxn == 1){
                 if(inRadians){System.out.println("sin(" + val + ") = " + Math.sin(val) ); }
