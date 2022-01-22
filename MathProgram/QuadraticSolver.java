@@ -1,88 +1,48 @@
 public class QuadraticSolver{
     public static String quadSolver(int[] coefficients){
-        // For ax^2 + bx + c = 0, the roots are x = (-b +/- sqrt(b^2 - 4ac))/2a
+      // Quadratic Formula - (-b +/- sqrt(b^2 - 4ac))/2a
+      int a = coefficients[0];
+      int b = coefficients[1];
+      int c = coefficients[2];
 
-        int a = coefficients[0], b = coefficients[1], c = coefficients[2]; // [a, b, c] corresponds to ax^2 + bx + c = 0
-        int denominator = 2 * a;
-        int discriminant = b * b - 4 * a * c; // Discriminant: b^2 - 4ac, to be used to test real roots for disc >= 0 or imaginary roots for disc < 0
-        String rootOne = "", rootTwo = "";
+      int denominator = 2 * a;
+      int discriminant = b * b - 4 * a * c; // Discriminant: b^2 - 4ac, value inside the square root
+      String rootOne = "", rootTwo = "", i = "";
 
-        // Real roots
-        if(discriminant >= 0){
-            int maxSquare = maxSquareFactor(discriminant); // Factor out the greatest square from the discriminant
-            discriminant /= (maxSquare * maxSquare); // Here on out, discriminant represents the (simplified) value inside the square root
+      if(discriminant < 0){
+        discriminant *= -1; // Factor out sqrt(-1) from the discriminant as "i"
+        i += "i"; // If there are imaginary roots, then "i" will be added to the string output; otherwise i is an empty string
+      }
 
-            // Determine the GCD of the -b, max square factor of the discriminant, and the 2a denominator & simplify
-            int gcd = MathC.gcd(MathC.gcd(b, maxSquare), denominator);
-            b /= gcd; maxSquare /= gcd; denominator /= gcd;
+      int maxSquare = maxSquareFactor(discriminant); // Factor out the greatest square from the discriminant
+      discriminant /= (maxSquare * maxSquare); // Here on out, discriminant represents the (simplified / factored out) value inside the square root
 
-            // RATIONAL!
-            if(discriminant == 1 || discriminant == 0){
-                // When the discriminant is a perfect square, there can only be rational roots
-                if(discriminant == 1) {
-                    Rational negRoot = new Rational((-b - maxSquare), denominator);
-                    Rational posRoot = new Rational((-b + maxSquare), denominator);
-                    negRoot.reduce();
-                    posRoot.reduce();
-                    return negRoot.toString() + ", " + posRoot.toString();
-                }
+      // Determine the GCD of the -b, max square factor of the discriminant, and the 2a denominator & simplify
+      int gcd = MathC.gcd(MathC.gcd(b, maxSquare), denominator);
+      b /= gcd; maxSquare /= gcd; denominator /= gcd;
 
-                Rational doubRoot = new Rational(-b, denominator);
-                doubRoot.reduce();
-                return doubRoot.toString() + ", " + doubRoot.toString();
-            }
+      if(b != 0 && denominator != 1){rootOne += "("; rootTwo += "(";} // Parentheses only really needed when roots look like (a + b)/c, when a != 0 & c != 1
 
-            // IRRATIONAL!
-            if(b != 0 && denominator != 1){rootOne += "("; rootTwo += "(";} // Parentheses only needed when roots look like (a + b)/c, where a != 0 & c != 1
+      if(b != 0){rootOne += -b + " + "; rootTwo += -b + " - ";}
+      else {rootTwo += "-";} // if b is 0, then it is redundant to incorporate it into the string output
 
-            if(b != 0){rootOne += -b + " + "; rootTwo += -b + " - ";}
-            else {rootTwo += "-";}
+      rootOne += maxSquare + i;
+      rootTwo += maxSquare + i;
 
-            if(maxSquare != 1){rootOne += maxSquare + ""; rootTwo += maxSquare + "";}
+      if(discriminant != 1){
+        rootOne += "\u221A(" + discriminant + ")";
+        rootTwo += "\u221A(" + discriminant + ")";
+      }
 
-            rootOne += "\u221A(" + discriminant + ")"; // \u221A is sqrt symbol
-            rootTwo += "\u221A(" + discriminant + ")";
+      if(b != 0 && denominator != 1){rootOne += ")"; rootTwo += ")";}
 
-            if(b != 0 && denominator != 1){rootOne += ")"; rootTwo += ")";}
+      if(denominator != 1){rootOne += "/" + denominator; rootTwo += "/" + denominator;} // /1 is redundant, only add the denominator when it isn't equal to 1
 
-            if(denominator != 1){rootOne += "/" + denominator; rootTwo += "/" + denominator;}
-
-            return rootOne + ", " + rootTwo;
-
-        }
-
-        // Imaginary roots
-        else{
-            // COMPLEX!
-            discriminant *= -1; // Factor out "i" from the discriminant, incorporate i into the string instead
-            int maxSquare = maxSquareFactor(discriminant);
-            discriminant /= maxSquare * maxSquare;
-
-            int gcd = MathC.gcd(MathC.gcd(-b, maxSquare), denominator);
-            b /= gcd; maxSquare /= gcd; denominator /= gcd;
-
-
-            if(b != 0 && denominator != 1){rootOne += "("; rootTwo += "(";}
-
-            if(b != 0){rootOne += -b + " + ";  rootTwo += -b + " - ";}
-            else {rootTwo += "-";}
-
-            if(maxSquare != 1){rootOne += maxSquare; rootTwo += maxSquare;}
-            rootOne += "i"; rootTwo += "i";
-
-            if(discriminant != 1){rootOne += "\u221A(" + discriminant + ")"; rootTwo += "\u221A(" + discriminant + ")";}
-
-            if(b != 0 && denominator != 1){rootOne += ")"; rootTwo += ")";}
-
-            if(denominator != 1){rootOne += "/" + denominator; rootTwo += "/" + denominator; }
-
-            return rootOne + ", " + rootTwo;
-
-        }
-
+      return rootOne + ", " + rootTwo;
     }
 
-    public static int maxSquareFactor(int val){
+    // Easier to use mSF than MathC simplify sqrt and string parsing ...
+    static int maxSquareFactor(int val){
         int max = 1;
         int num = val;
         for(int i = 2; i <= num; i++){

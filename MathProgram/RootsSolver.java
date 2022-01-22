@@ -1,4 +1,7 @@
-public class rootsSolver{
+import java.util.Arrays;
+import java.util.ArrayList;
+
+public class RootsSolver{
 
 	public static String rootsSolver(int[] coefficients){
         if(coefficients.length == 2){
@@ -8,20 +11,19 @@ public class rootsSolver{
 					return root.toString();
 				}
 
-				if(coefficients.length == 3){return QuadraticSolver.quadSolver(coefficients);} // Base case for polynomials length 3+
+				int numTerms = coefficients.length;
+        ArrayList<Integer> firstFactors = MathC.factors(coefficients[0]); // Determine leading term's factors
+        ArrayList<Integer> lastFactors = MathC.factors(coefficients[numTerms - 1]); // Determine final term's factors
 
-        int numTerms = coefficients.length;
-        int[] firstFactors = factors(coefficients[0]); // Determine leading term's factors
-        int[] lastFactors = factors(coefficients[numTerms - 1]); // Determine final term's factors
         int sumNumPos = 0; int sumNumNeg = 0;
 
-        for(int i = 0; i < firstFactors.length; i++){
-         for(int j = 0; j < lastFactors.length; j++){
+        for(int i = 0; i < firstFactors.size(); i++){
+         for(int j = 0; j < lastFactors.size(); j++){
             sumNumPos = 0; sumNumNeg = 0;
 
             // Application of the Rational Root Theorem!
-            int numerator = lastFactors[j];  // Factors of final term -> numerator of potential factor
-            int denominator = firstFactors[i]; // Factors of leading term -> denominator of potential factor
+            int numerator = lastFactors.get(j) ;  // Factors of final term -> numerator of potential factor
+            int denominator = firstFactors.get(i) ; // Factors of leading term -> denominator of potential factor
 
             // Simplify the fraction
 	    			int gcd = MathC.gcd(numerator, denominator);
@@ -41,18 +43,25 @@ public class rootsSolver{
                 sumNumNeg += coefficients[k] * (int) Math.pow(-numerator, numTerms - k - 1) * (int) Math.pow(denominator, k);
             }
 
+
 						// According to the remainder theorem, for a polynomial P(x), if P(b) = 0, then "b" is a root of P(x)
 						// Factor out (x - b) from the polynomial accordingly and repeat
             if(sumNumPos == 0 || sumNumNeg == 0){
                 if(sumNumNeg == 0) numerator *= -1;
 
 								int[] quotient = syntheticDivision(coefficients, numerator, denominator); // Apply synthetic division to get quotient polynomial to be recursed upon
-                if(denominator == 1) {return numerator + ", " + rootsSolver(quotient);}
+								if(denominator == 1) {return numerator + ", " + rootsSolver(quotient);}
                 else{return numerator + "/" + denominator + ", " + rootsSolver(quotient);}
             }
          }
         }
-        return "No rational roots found!";
+
+				if(coefficients.length == 3){return QuadraticSolver.quadSolver(coefficients);} // If rational root solver doesn't work, then default to quadratic formula
+				// quadSolver will only need to evaluate for irrational and complex roots if rational roots are accounted for beforehand
+
+				if(coefficients.length == 4){return CubicSolver.cubicSolver(coefficients);} // Same principle w/ cubicSolver
+				
+				return "no roots found!";
     }
 
   public static int[] syntheticDivision(int[] polynomial, int numerator, int denominator){
@@ -73,23 +82,5 @@ public class rootsSolver{
         return quotient;
     }
 
-	public static int[] factors(int val){
-		 // return an array of all the (positive) factors of a given val
-			if (val == 0){
-            	return new int[1]; // if the last term of a polynomial is 0, then it is factorable by x and x = 0 is a factor
-							// e. g. 5x^3 + 40x^2 + 30x + 0 = 0  being factored as x(5x^2 + 40x + 30)= 0, x = 0 is a factor
-      }
 
-	    val = Math.abs(val); // Use the absolute value of the value while finding factors - (+) and (-) factors are both applied anyway
-	    int counter = 0;
-	    for(int i = 1; i <= val; i++){
-	        if (val % i == 0){counter++;}
-	    }
-	    int[] factors = new int[counter];
-	    int index = 0;
-	    for(int i = 1; i <= val; i++){
-	        if(val % i == 0){factors[index] = i; index++;}
-	    }
-	    return factors;
-	}
 }

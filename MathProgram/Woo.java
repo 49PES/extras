@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+
 public class Woo{
   public static void main(String[] args){
     Scanner sc = new Scanner(System.in);
@@ -8,13 +10,100 @@ public class Woo{
     System.out.println("Welcome to this custom math class!\nPlease enter numerical values to navigate.");
 
     while(true){
-      System.out.println("\nWhat would you like to do?\n[1] Polynomials\n[2] Triangles\n[3] Probability \n[4] Trigonometry\n[5] End session");
+      System.out.println("\nWhat would you like to do?\n[1] General Math Utilities \n[2] Polynomials\n[3] Triangles\n[4] Probability \n[5] Trigonometry\n[6] End session");
       task = sc.nextInt();
+      // General Math Util
       if(task == 1){
+        while(true){
+          System.out.println("What would you like to calculate? \n[1] Greatest Common Divisor \n[2] Least Common Multiple \n[3] Simplify a square root \n[4] Factors of a number \n[5] Rectangular to Polar Form \n[6] Polar to Rectangular Form \n[7] Exit Math Utilities");
+          int mathType = sc.nextInt();
+
+          // GCD
+          if(mathType == 1){
+            ArrayList<Integer> values = new ArrayList<Integer>();
+            System.out.println("Input the values (minimum of 2!) for calculating the GCD of, and enter 0 when you are done");
+            int val = sc.nextInt();
+            while(values.size() < 2 || val != 0){
+              if(val != 0) {values.add(val);}
+              val = sc.nextInt();
+            }
+            int gcd = values.get(0);
+            for(int i = 1; i < values.size(); i++){
+              gcd = MathC.gcd(gcd, values.get(i));
+            }
+            System.out.println("These were the values you inputted: " + values);
+            System.out.println("This is their GCD: " + gcd);
+          }
+
+          // Essentially a copy of GCD code // LCM
+          if(mathType == 2){
+            ArrayList<Integer> values = new ArrayList<Integer>();
+            System.out.println("Input the values (minimum of 2!) for calculating the LCM of, and enter 0 when you are done");
+            int val = sc.nextInt();
+            while(values.size() < 2 || val != 0){
+              if(val != 0) {values.add(val);}
+              val = sc.nextInt();
+            }
+            int lcm = values.get(0);
+            for(int i = 1; i < values.size(); i++){
+              lcm = MathC.lcm(lcm, values.get(i));
+            }
+            System.out.println("These were the values you inputted: " + values);
+            System.out.println("This is their LCM: " + lcm);
+          }
+
+          // Square Root
+          if(mathType == 3){
+            while (true){
+
+              System.out.println("What value would you like to simplify the square root of?");
+              int square = sc.nextInt();
+              if (square > 1 || square < 0){
+                System.out.println("\u221A" + square + " -> " + MathC.simplifySqrt(square));
+                break;
+              }
+              else{
+                System.out.println(" Invalid input - input is between 0 and 1");
+              }
+            }
+
+          }
+
+          // Factor
+          if(mathType == 4){
+            System.out.println("Input the value you want to determine the factors of");
+            int val = sc.nextInt();
+            System.out.println("The factors of " + val + " are " + MathC.factors(val) );
+          }
+
+          // RectToPolar
+          if(mathType == 5){
+            System.out.print("What is your x coordinate? ");
+            double x = sc.nextDouble();
+            System.out.print("What is your y coordinate? ");
+            double y = sc.nextDouble();
+            System.out.println("(" + x + ", " + y + ") ->\n" + MathC.rectToPolar(x, y));
+          }
+
+          // PolarToRect
+          if(mathType == 6){
+            System.out.print("What is your magnitude? ");
+            double r = sc.nextDouble();
+            System.out.print("What is your angle? ");
+            double t = sc.nextDouble();
+            System.out.println("Magnitude: " + r + ", Angle: " + t + " -> " + MathC.polarToRect(r, t) );
+          }
+
+          //break
+          if(mathType == 7) break;
+        }}
+
+      // Polynomials
+      if(task == 2){
         int type;
         while(true){
-        type = sc.nextInt();
         System.out.println("What values of your polynomial would you like to provide? \n[1] Roots \n[2] Coefficients?");
+        type = sc.nextInt();
 
         if(type == 1){
         System.out.print("How many roots do you have? ");
@@ -45,14 +134,16 @@ public class Woo{
         System.out.println("Your polynomial is: " + tempPoly.polyToString());
         System.out.print("Would you like the roots of your polynomial? Y / N ");
         if(sc.next().equals("Y")){
-          System.out.println(rootsSolver.rootsSolver(tempPoly.getPolynomial()));
+          System.out.println(RootsSolver.rootsSolver(tempPoly.getPolynomial()));
         }
         System.out.print("Would you like to exit Polynomial? Y / N ");
         String input = sc.next();
         if(input.equals("Y")){break;}
        }
      }
-      if(task == 2){
+
+     // Triangles
+      if(task == 3){
         while(true){
         System.out.println("Please input the values for your triangle, inputting 0 where unknown");
         double sA, sB, sC, aA, aB, aC;
@@ -69,7 +160,9 @@ public class Woo{
         String input = sc.next();
         if(input.equals("Y")){break;}
       }}
-      if(task == 3){
+
+      // Probability
+      if(task == 4){
         int probabilityTask = 0; int n, r; double p;
         while(probabilityTask != 5){
         System.out.println("What would you like to do? \n[1] Factorials \n[2] Permutations \n[3] Combinations \n[4] Binomial Distributions \n[5] Exit Probability");
@@ -100,7 +193,9 @@ public class Woo{
         }
       }
       }
-      if(task == 4){
+
+      // Trigonometry
+      if(task == 5){
         boolean inRadians = true; int trigType;
         while(true) {
           System.out.println("What would you like to do? \n[1] Change radians/degrees \n[2] Evaluate a trig function \n[3] Exit Trigonometry" );
@@ -155,7 +250,9 @@ public class Woo{
           if(trigType == 3) break;
         }
       }
-      if(task == 5){break;}
+
+      // Break
+      if(task == 6){break;}
     }
 
   }
