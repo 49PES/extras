@@ -3,7 +3,7 @@ public class CubicSolver{
    // Formula for cubic looks roughly like
   // cbrt(q + sqrt(q^2 + p^3)) + cbrt(q + sqrt(q^2 + p^3)) - b/3a
   //
-  // q = (bc/6a^2 - d/2a - b^3)
+  // q = (bc/6a^2 - d/2a - b^3/27a^3)
   // p = (c/3a - b^2/9a^2)
 
   public static String cubicSolver(int[] coefficients){
@@ -18,7 +18,7 @@ public class CubicSolver{
 
     Rational q = new Rational(b * c, 6 * a * a);
     q.subtract(new Rational(d, 2 * a));
-    q.subtract(new Rational(b * b * b)); // bc/6a^2 - d/2a - b^3
+    q.subtract(new Rational(b * b * b, 27 * a * a * a)); // bc/6a^2 - d/2a - b^3/27a^3
     q.reduce();
 
     Rational sqrtSum = new Rational(q);
