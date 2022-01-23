@@ -1,3 +1,4 @@
+import java.util.Arrays;
 public class Probability{
   // Probability Suite
   // Factorials, Permutations, Combinations, Binomial Probability & Cumulative Distributions
@@ -39,6 +40,19 @@ public class Probability{
       if(r < n - r) return permute(n, r) / factorial(r);
       return permute(n, n - r) / factorial(n - r);
    }
+
+   static String binomExpansion(int a, int b, int n){
+      // expand (ax + b)^n
+     int[] coefficients = new int[n + 1];
+     for(int i = n; i >= 0; i--){
+         coefficients[n - i] = ((int) Math.pow(a, i) * (int) Math.pow(b, n - i)  * (int) choose(n, i));
+     }
+
+    Polynomial expansion = new Polynomial(coefficients, "coefficients");
+    return expansion.polyToString();
+   }
+
+
 
   static double binomPDF(int n, int r, double p){
     // Binomial Probability Distribution Function - return nCr * p^r * (1 - p)^(n - r)

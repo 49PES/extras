@@ -25,9 +25,13 @@ public class QuadraticSolver{
 
       if(b != 0){rootOne += -b + " + "; rootTwo += -b + " - ";}
       else {rootTwo += "-";} // if b is 0, then it is redundant to incorporate it into the string output
+      if(maxSquare != 1 || (maxSquare == 1 && (!i.equals("i") && discriminant != 1)) ){
+          rootOne += maxSquare + "";
+          rootTwo += maxSquare + "";
+      }
 
-      rootOne += maxSquare + i;
-      rootTwo += maxSquare + i;
+      rootOne += i;
+      rootTwo += i;
 
       if(discriminant != 1){
         rootOne += "\u221A(" + discriminant + ")";

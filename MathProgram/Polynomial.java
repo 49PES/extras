@@ -36,8 +36,10 @@ public class Polynomial {
         if(coefficients.length == 1){return output + coefficients[0];}
 
         if(coefficients[0] == -1){output += "-";}
-        else if(coefficients[0] == 1){output += "x";}
-        else{output += coefficients[0] + "x";}
+        else if(coefficients[0] == 1){}
+        else{output += coefficients[0] + "";}
+
+        output += "x";
 
         if(numTerms - 1 != 1){output += "^" + (numTerms - 1);}
 
@@ -59,7 +61,7 @@ public class Polynomial {
         if(coefficients[numTerms - 1] > 0){output += " + " + coefficients[numTerms - 1];}
         else if(coefficients[numTerms - 1] < 0){output += " - " + -coefficients[numTerms - 1];}
         return output;
-    }
+      }
 
     static int[] polyGenerator(int[] roots){
         if(roots.length == 1){

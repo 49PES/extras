@@ -164,8 +164,8 @@ public class Woo{
       // Probability
       if(task == 4){
         int probabilityTask = 0; int n, r; double p;
-        while(probabilityTask != 5){
-        System.out.println("What would you like to do? \n[1] Factorials \n[2] Permutations \n[3] Combinations \n[4] Binomial Distributions \n[5] Exit Probability");
+        while(true){
+        System.out.println("What would you like to do? \n[1] Factorials \n[2] Permutations \n[3] Combinations \n[4] Binomial Expansions \n[5] Binomial Distributions \n[6] Exit Probability");
         probabilityTask = sc.nextInt();
         if(probabilityTask == 1){
           System.out.println("n! = n * (n - 1) * (n - 2) * ... * 2 * 1 (& 0! = 1)");
@@ -185,12 +185,21 @@ public class Woo{
           System.out.println(n + "C" + r + " = " + Probability.choose(n, r) + "\n");
         }
         if(probabilityTask == 4){
+          int a, b, x;
+          System.out.println("Expanding (ax + b)^x. Enter your a, b, and x");
+          System.out.print("a? "); a = sc.nextInt();
+          System.out.print("b? "); b = sc.nextInt();
+          System.out.print("x? "); x = sc.nextInt();
+          System.out.println(Probability.binomExpansion(a, b, x));
+        }
+        if(probabilityTask == 5){
           System.out.println("P(r) = nCr * p^r * (1 - p)^r");
           System.out.print("n? "); n = sc.nextInt();
           System.out.print("r? "); r = sc.nextInt();
           System.out.print("p? "); p = sc.nextDouble();
           Probability.binomCDFAll(n, r, p);
         }
+        if(probabilityTask == 6){break;}
       }
       }
 
