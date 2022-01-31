@@ -165,7 +165,7 @@ public class Woo{
       if(task == 4){
         int probabilityTask = 0; int n, r; double p;
         while(true){
-        System.out.println("What would you like to do? \n[1] Factorials \n[2] Permutations \n[3] Combinations \n[4] Binomial Expansions \n[5] Binomial Distributions \n[6] Exit Probability");
+        System.out.println("What would you like to do? \n[1] Factorials \n[2] Permutations \n[3] Combinations \n[4] Binomial Expansions \n[5] Binomial Distributions \n[6] Convert Cubic to Depressed Cubic \n[7] Exit Probability");
         probabilityTask = sc.nextInt();
         if(probabilityTask == 1){
           System.out.println("n! = n * (n - 1) * (n - 2) * ... * 2 * 1 (& 0! = 1)");
@@ -190,7 +190,8 @@ public class Woo{
           System.out.print("a? "); a = sc.nextInt();
           System.out.print("b? "); b = sc.nextInt();
           System.out.print("x? "); x = sc.nextInt();
-          System.out.println(Probability.binomExpansion(a, b, x));
+          Polynomial expansion = new Polynomial(Probability.binomExpansion(a, b, x), "coefficients");
+          System.out.println(expansion.polyToString());
         }
         if(probabilityTask == 5){
           System.out.println("P(r) = nCr * p^r * (1 - p)^r");
@@ -199,7 +200,18 @@ public class Woo{
           System.out.print("p? "); p = sc.nextDouble();
           Probability.binomCDFAll(n, r, p);
         }
-        if(probabilityTask == 6){break;}
+        if(probabilityTask == 6){
+
+          System.out.println("Convert ax^3 + bx^2 + cx + d = 0 to y^3 + py + q = 0" );
+          int[] cubic = new int[4];
+          System.out.print("a? "); cubic[0] = sc.nextInt();
+          System.out.print("b? "); cubic[1] = sc.nextInt();
+          System.out.print("c? "); cubic[2] = sc.nextInt();
+          System.out.print("d? "); cubic[3] = sc.nextInt();
+          Polynomial depressed = new Polynomial( Probability.convertDepressed(cubic), "coefficients" );
+          System.out.println(depressed.polyToString() );
+        }
+        if(probabilityTask == 7){break;}
       }
       }
 

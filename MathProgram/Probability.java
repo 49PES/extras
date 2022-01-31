@@ -41,18 +41,42 @@ public class Probability{
       return permute(n, n - r) / factorial(n - r);
    }
 
-   static String binomExpansion(int a, int b, int n){
+  static int[] binomExpansion(int a, int b, int n){
       // expand (ax + b)^n
      int[] coefficients = new int[n + 1];
      for(int i = n; i >= 0; i--){
          coefficients[n - i] = ((int) Math.pow(a, i) * (int) Math.pow(b, n - i)  * (int) choose(n, i));
      }
-
-    Polynomial expansion = new Polynomial(coefficients, "coefficients");
-    return expansion.polyToString();
+     return coefficients;
    }
 
+  static int[] convertDepressed(int[] cubic){
 
+   int shift = -cubic[1] / (3 * cubic[0]);
+
+   Polynomial cube = new Polynomial(binomExpansion(1, shift, 3), "coefficients");
+   Polynomial square = new Polynomial(binomExpansion(1, shift, 2), "coefficients");
+   Polynomial linear = new Polynomial(binomExpansion(1, shift, 1), "coefficients");
+   Polynomial constant = new Polynomial(binomExpansion(1, shift, 0), "coefficients");
+
+   Polynomial[] sum = {cube, square, linear, constant};
+
+   for(int i = 0; i < sum.length; i++){
+     System.out.println(String.format("%s%d(%s)", new String("     ").repeat(i), cubic[i], sum[i].polyToString()));
+   }
+
+   System.out.println(new String("---").repeat(10));
+
+   for(int i = 0; i < sum.length; i++){ sum[i].distribute(cubic[i]); }
+
+   for(int i = 0; i < sum.length; i++){
+     System.out.println(new String("     ").repeat(i) + sum[i].polyToString());
+    }
+
+    System.out.println(new String("---").repeat(10));
+
+     return Polynomial.add(Polynomial.add(Polynomial.add(cube.getPolynomial(), square.getPolynomial()), linear.getPolynomial()), constant.getPolynomial());
+   }
 
   static double binomPDF(int n, int r, double p){
     // Binomial Probability Distribution Function - return nCr * p^r * (1 - p)^(n - r)
